@@ -1,0 +1,4 @@
+class mesh::object
+{
+
+};
