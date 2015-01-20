@@ -19,7 +19,9 @@ void Scene::load_scene(const string path) {
         while(getline(file_img, line_img)) {
             numberOfObjects++;
             line_size = line_img.size();
+            for(i=0; i<line_size; i++) {
 
+            }
         }
     }
     // Si erreur
