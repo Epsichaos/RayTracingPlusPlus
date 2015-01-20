@@ -16,6 +16,7 @@ void Scene::load_scene(const string path) {
     // Si ouverture OK
     if(file_img) {
         string line_img;
+        // Boucle sur les lignes
         while(getline(file_img, line_img)) {
             numberOfObjects++;
             line_size = line_img.size();
