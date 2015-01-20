@@ -1,4 +1,4 @@
-class sphere::object
+class Sphere::object
 {
 protected:
 	point m_center;

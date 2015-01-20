@@ -8,7 +8,7 @@ void Scene::load_scene(const string path) {
 
     int numberOfObjects = 0;
     int line_size = 0;
-    int i;
+    int i,j;
     string file_name = "input";
     ifstream file_img;
     file_img.open(file_name.c_str());
@@ -22,7 +22,9 @@ void Scene::load_scene(const string path) {
             line_size = line_img.size();
             // si la ligne est de type sphere
             if(line_img[0]="s"&&line_img[1]="p") {
-
+                j = 4;
+                Sphere spr;
+                Sphere.setCenter
             }
             // si la ligne est de type cube
             if(line_img[0]="c"&&line_img[1]="u") {
