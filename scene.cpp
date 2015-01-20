@@ -20,8 +20,24 @@ void Scene::load_scene(const string path) {
         while(getline(file_img, line_img)) {
             numberOfObjects++;
             line_size = line_img.size();
+            // si la ligne est de type sphere
+            if(line_img[0]="s"&&line_img[1]="p") {
 
+            }
+            // si la ligne est de type cube
+            if(line_img[0]="c"&&line_img[1]="u") {
+
+            }
+            // si la ligne est de type camera
+            if(line_img[0]="c"&&line_img[1]="a") {
+
+            }
+            // si la ligne est de type light
+            if(line_img[0]="l"&&line_img[1]="i") {
+
+            }
         }
+        m_objectNumber = numberOfObjects;
     }
     // Si erreur
     else {
