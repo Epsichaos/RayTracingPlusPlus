@@ -24,7 +24,7 @@ void Scene::load_scene(const string path) {
             if(line_img[0]="s"&&line_img[1]="p") {
                 j = 4;
                 Sphere spr;
-                Sphere.setCenter
+                //Sphere.setCenter
             }
             // si la ligne est de type cube
             if(line_img[0]="c"&&line_img[1]="u") {
