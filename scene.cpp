@@ -7,6 +7,10 @@ using namespace std;
 void Scene::load_scene(const string path) {
 
     int numberOfObjects = 0;
+    int nb_sphere = 0;
+    int nb_cube = 0;
+    int nb_camera = 0;
+    int nb_light = 0;
     int line_size = 0;
     int i,j;
     string file_name = "input";
@@ -19,9 +23,28 @@ void Scene::load_scene(const string path) {
         // Boucle sur les lignes
         while(getline(file_img, line_img)) {
             numberOfObjects++;
+            if(line_img[0]="s"&&line_img[1]="p") {
+                nb_sphere++;
+            }
+            if(line_img[0]="c"&&line_img[1]="u") {
+                nb_cube++;
+            }
+            if(line_img[0]="c"&&line_img[1]="a") {
+                nb_camera++;
+            }
+            if(line_img[0]="l"&&line_img[1]="i") {
+                nb_light++;
+            }
+        }
+        file_img.seekg(0, ios::beg);
+        while(getline(file_img, line_img)) {
             line_size = line_img.size();
             for(i=0; i<line_size; i++) {
-
+                if(line_img[0]="s"&&line_img[1]="p") {
+                    j = 4;
+                    Sphere spr;
+                    //Sphere.setCenter
+                }
             }
             // si la ligne est de type sphere
             if(line_img[0]="s"&&line_img[1]="p") {
