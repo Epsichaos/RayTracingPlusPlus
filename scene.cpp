@@ -20,11 +20,9 @@ void Scene::load_scene(const string path) {
         while(getline(file_img, line_img)) {
             numberOfObjects++;
             line_size = line_img.size();
-<<<<<<< HEAD
             for(i=0; i<line_size; i++) {
 
             }
-=======
             // si la ligne est de type sphere
             if(line_img[0]="s"&&line_img[1]="p") {
                 j = 4;
@@ -43,13 +41,10 @@ void Scene::load_scene(const string path) {
             if(line_img[0]="l"&&line_img[1]="i") {
 
             }
->>>>>>> 1.1-saisie
+            // Si erreur
         }
-        m_objectNumber = numberOfObjects;
-    }
-    // Si erreur
     else {
-        cerr << "Error when opening input file" << endl;
+            cerr << "Error when opening input file" << endl;
     }
     return 0;
 }
