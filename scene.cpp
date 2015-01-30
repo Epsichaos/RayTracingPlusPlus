@@ -15,6 +15,9 @@ void Scene::load_scene(const string path) {
     int i,j;
 
     string nb_1, nb_2, nb_3;
+    nb_1 = "";
+    nb_2 = "";
+    nb_3 = "";
 
     string file_name = "input";
     ifstream file_img;
