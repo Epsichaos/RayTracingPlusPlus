@@ -1,6 +1,7 @@
-#include<iostream>
-#include<fstream>
-#include<string>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include "scene.h"
 
 using namespace std;
 
