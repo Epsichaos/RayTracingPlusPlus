@@ -6,6 +6,7 @@
 class Object
 {
 public:
+	color getColor(point input_point);
 protected:
 	enum m_type {Camera, Light, Cube, Sphere, Mesh};
 	Material m_mat;

@@ -1,4 +1,4 @@
-class scene
+class Scene
 {
 public:
 	void load_scene(const string path);
