@@ -1,3 +1,3 @@
-void render(scene const& Mainscene);
+void render(scene const& Mainscene, color* image);
 point computeIntersection(ray rayon, object objet);
 int findClosest(ray rayon, object* objet)
