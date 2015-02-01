@@ -1,7 +1,14 @@
-class material
+#ifndef MATERIAL_H
+#define MATERIAL_H
+
+#include "color.h"
+
+class Material
 {
  protected:
- 	double reflexion;
- 	double refraction;
- 	color m_color;
+ 	double m_reflexion;
+ 	double m_refraction;
+ 	Color m_color;
  };
+
+#endif

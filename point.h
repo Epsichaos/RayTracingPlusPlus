@@ -1,3 +1,6 @@
+#ifndef POINT_H
+#define POINT_H
+
 class Point
 {
 	protected:
@@ -5,14 +8,10 @@ class Point
 		double m_y;
 		double m_z;
 	public:
-		Point() {
-			m_x = 0;
-			m_y = 0;
-			m_z = 0;
-		}
-		Point(double x, double y, double z) {
-			m_x = x;
-			m_y = y;
-			m_z = z;
-		}
+		Point();
+		Point(double, double, double);
+		void setPoint(double, double, double);
+		void printPoint();
 };
+
+#endif
