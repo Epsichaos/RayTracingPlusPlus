@@ -1,5 +1,6 @@
 lancer_rayon(ray rayon, scene scene, int current_depth)
 {
+	color pixel_color;
 	int number_of_objects=0;
 	int indice_closest;
 	color color_point;
@@ -12,9 +13,22 @@ lancer_rayon(ray rayon, scene scene, int current_depth)
 		intersections[i] = compute_intersection(rayon,objets[i]);
 	}
 	indice_closest = findClosest(rayon, objets);
+
+	pixel_color = objets[indice_closest].getColor;
+	number_of_lights = scene.getNumberOfObjects("Light");
+	light* lights = new light[number_of_lights];
+	vector normale = objets[indice_closest].computeNormale(intersections[indice_closest]);
+	for(int j=0;j<number_of_lights;j++)
+	{ 
+		shadow_factor = computeShadow(intersections[indice_closest], objets[indice_closest],lights[j]); // penser à mettre l'atténuation dedans
+		vector ray_to_light = lights[j].computeRayToLight(intersections[indice_closest]);
+		pixel_color *= shadow_factor*(raytolight*normale)*objets[indice_closest].GetDiffuseFactor();
+		pixel_color *= lights[j].getColor;
+	}
+
+
 	if(objets[indice_closest].hasReflexion())
 	{
-		vector normale = objets[indice_closest].computeNormale(intersections[indice_closest]);
 
 		ray* new_ray = new ray(intersections[indice_closest], rayon.direction()-2*(normale*rayon.direction())*normale);
 		if(current_depth<MAX_RECCURSIVE_DEPTH)
@@ -23,12 +37,6 @@ lancer_rayon(ray rayon, scene scene, int current_depth)
 	if(objets[indice_closest].hasRefraction())
 	{
 		
-	}
-	number_of_lights = scene.getNumberOfObjects("Light");
-	light* lights = new light[number_of_lights];
-	for(int j=0;j<number_of_lights;j++)
-	{ 
-		shadow_factor = computeShadow(intersections[indice_closest], objets[indice_closest],lights[j]);
 	}
 
 }

@@ -8,7 +8,10 @@ class Material
  protected:
  	double m_reflexion;
  	double m_refraction;
+ 	double m_refraction;
+ 	double m_refraction;
  	Color m_color;
+ 	
  };
 
 #endif
