@@ -1,7 +1,7 @@
 class Scene
 {
 public:
-	void load_scene(const string path);
+	void loadScene(const string path);
 	int getNumberOfObjects();
 	int getNumberOfObjects(enum m_type type);
 	void getObjects(object* input_array);

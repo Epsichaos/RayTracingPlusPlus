@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void Scene::load_scene(const string path) {
+void Scene::loadScene(const string path) {
 
     int numberOfObjects = 0;
     int nb_sphere = 0;
