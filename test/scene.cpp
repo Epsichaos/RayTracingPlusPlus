@@ -1,12 +1,14 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <stdlib.h>
 #include "sphere.h"
 #include "object.h"
 #include "cube.h"
 #include "material.h"
 #include "point.h"
 #include "color.h"
+#include "scene.h"
 
 using namespace std;
 
@@ -28,6 +30,7 @@ void Scene::loadScene(const string path) {
     string file_name = "input";
     ifstream file_img;
     file_img.open(file_name.c_str());
+    const char* line_img_str;
 
     // Si ouverture OK
     if(file_img) {
@@ -35,26 +38,29 @@ void Scene::loadScene(const string path) {
         // Boucle sur les lignes
         while(getline(file_img, line_img)) {
             numberOfObjects++;
-            if(line_img[0]="s"&&line_img[1]="p") {
+            cout << line_img << endl;
+            line_img_str = line_img.c_str();
+            if(line_img_str[0]=='s'&&line_img_str[1]=='p') {
                 nb_sphere++;
             }
-            if(line_img[0]="c"&&line_img[1]="u") {
+            if(line_img_str[0]=='c'&&line_img_str[1]=='u') {
                 nb_cube++;
             }
-            if(line_img[0]="c"&&line_img[1]="a") {
+            if(line_img_str[0]=='c'&&line_img_str[1]=='a') {
                 nb_camera++;
             }
-            if(line_img[0]="l"&&line_img[1]="i") {
+            if(line_img_str[0]=='l'&&line_img_str[1]=='i') {
                 nb_light++;
             }
         }
-        object *arrayOfObjects = new object[numberOfObjects];
+        Object *arrayOfObjects = new Object[numberOfObjects];
         file_img.seekg(0, ios::beg);
         while(getline(file_img, line_img)) {
+            line_img_str = line_img.c_str();
             line_size = line_img.size();
             for(i=0; i<line_size; i++) {
                 // Si la ligne est de type sphere
-                if(line_img[0]="s"&&line_img[1]="p") {
+                if(line_img_str[0]=='s'&&line_img_str[1]=='p') {
                     j = 4;
                     Sphere spr;
                     nb_1 = "";
@@ -64,41 +70,41 @@ void Scene::loadScene(const string path) {
                     color_R = "";
                     color_V = "";
                     color_B = "";
-                    while(line_img[j]!=" ") {
-                        nb_1 = nb_1 + line_img[j];
+                    while(line_img_str[j]!=' ') {
+                        nb_1 = nb_1 + line_img_str[j];
                         j++;
                     }
                     j++;
-                    while(line_img[j]!=" ") {
-                        nb_2 = nb_2 + line_img[j];
+                    while(line_img_str[j]!=' ') {
+                        nb_2 = nb_2 + line_img_str[j];
                         j++;
                     }
                     j++;
-                    while(line_img[j]!=" ") {
-                        nb_3 = nb_3 + line_img[j];
+                    while(line_img_str[j]!=' ') {
+                        nb_3 = nb_3 + line_img_str[j];
                         j++;
                     }
-                    point center(atof(nb_1), atof(nb_2), atof(nb_3));
+                    Point center(atof(nb_1), atof(nb_2), atof(nb_3));
                     spr.setCenter(center);
                     j++;
-                    while(line_img[j]!=" ") {
-                        radius = radius + line_img[j];
+                    while(line_img_str[j]!=' ') {
+                        radius = radius + line_img_str[j];
                         j++;
                     }
                     spr.setRadius(atof(radius));
-                    j++
-                    while(line_img[j]!=" ") {
-                        color_R = color_R + line_img[j];
+                    j++;
+                    while(line_img_str[j]!=' ') {
+                        color_R = color_R + line_img_str[j];
                         j++;
                     }
                     j++;
-                    while(line_img[j]!=" ") {
-                        color_V = color_V + line_img[j];
+                    while(line_img_str[j]!=' ') {
+                        color_V = color_V + line_img_str[j];
                         j++;
                     }
                     j++;
-                    while(line_img[j]!=" ") {
-                        color_B = color_B + line_img[j];
+                    while(line_img_str[j]!=' ') {
+                        color_B = color_B + line_img_str[j];
                         j++;
                     }
                     color_object.setColor(atof(color_R),atof(color_V),atof(color_B));
@@ -107,21 +113,21 @@ void Scene::loadScene(const string path) {
             }
             /*
             // si la ligne est de type cube
-            if(line_img[0]="c"&&line_img[1]="u") {
+            if(line_img[0]=="c"&&line_img[1]=="u") {
 
             }
             // si la ligne est de type camera
-            if(line_img[0]="c"&&line_img[1]="a") {
+            if(line_img[0]=="c"&&line_img[1]=="a") {
 
             }
             // si la ligne est de type light
-            if(line_img[0]="l"&&line_img[1]="i") {
+            if(line_img[0]=="l"&&line_img[1]=="i") {
 
             }
             */
         }
+    }
     else {
         cerr << "Error when opening input file" << endl;
     }
-    return 0;
 }
