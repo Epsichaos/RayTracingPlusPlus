@@ -4,6 +4,8 @@
 #include "material.h"
 #include "color.h"
 #include "point.h"
+#include "struct.h"
+#include <string>
 
 class Object
 {
@@ -11,8 +13,11 @@ public:
 	Color getColor(Point input_point);
 	Color getColor();
 	void setColorObject(Color);
+	void setTypeObject(std::string);
 protected:
-	enum m_type {Camera, Light, Cube, Sphere, Mesh};
+	//type_object m_type;
+	//enum m_type {Camera, Light, Cube, Sphere, Mesh};
+	int m_type;
 	Material m_mat;
 };
 
