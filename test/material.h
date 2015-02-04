@@ -9,6 +9,7 @@ class Material
  	double m_reflexion;
  	double m_refraction;
  	Color m_color;
+
  };
 
 #endif
