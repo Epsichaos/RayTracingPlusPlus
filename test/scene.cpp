@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+//#include <cstdlib>
 #include <stdlib.h>
 #include "sphere.h"
 #include "object.h"
@@ -54,13 +55,15 @@ void Scene::loadScene(const string path) {
             }
         }
         Object *arrayOfObjects = new Object[numberOfObjects];
-        file_img.seekg(0, ios::beg);
+
+        file_img.clear();
+        file_img.seekg(0, file_img.beg);
         while(getline(file_img, line_img)) {
             line_img_str = line_img.c_str();
             line_size = line_img.size();
-            for(i=0; i<line_size; i++) {
                 // Si la ligne est de type sphere
                 if(line_img_str[0]=='s'&&line_img_str[1]=='p') {
+                    cout << "LEKOFJZOJRO" << endl;
                     j = 4;
                     Sphere spr;
                     nb_1 = "";
@@ -84,14 +87,14 @@ void Scene::loadScene(const string path) {
                         nb_3 = nb_3 + line_img_str[j];
                         j++;
                     }
-                    Point center(atof(nb_1), atof(nb_2), atof(nb_3));
+                    Point center(stod((nb_1),NULL), stod((nb_2),NULL), stod((nb_3),NULL));
                     spr.setCenter(center);
                     j++;
                     while(line_img_str[j]!=' ') {
                         radius = radius + line_img_str[j];
                         j++;
                     }
-                    spr.setRadius(atof(radius));
+                    spr.setRadius(stod(radius, NULL));
                     j++;
                     while(line_img_str[j]!=' ') {
                         color_R = color_R + line_img_str[j];
@@ -107,10 +110,10 @@ void Scene::loadScene(const string path) {
                         color_B = color_B + line_img_str[j];
                         j++;
                     }
-                    color_object.setColor(atof(color_R),atof(color_V),atof(color_B));
+                    color_object.setColor(stod(color_R, NULL),stod(color_V, NULL),stod(color_B, NULL));
                     spr.setColorObject(color_object);
+                    spr.printSphere();
                 }
-            }
             /*
             // si la ligne est de type cube
             if(line_img[0]=="c"&&line_img[1]=="u") {

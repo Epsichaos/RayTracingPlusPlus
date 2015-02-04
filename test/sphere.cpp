@@ -2,6 +2,8 @@
 #include "sphere.h"
 #include "point.h"
 
+using namespace std;
+
 Sphere::Sphere() {
     m_center = Point();
     m_radius = 0;
@@ -17,4 +19,9 @@ void Sphere::setCenter(Point center) {
 }
 void Sphere::setRadius(double radius) {
     m_radius = radius;
+}
+
+void Sphere::printSphere() {
+    cout << "La sphere : " << m_radius << endl;
+    m_center.printPoint();
 }
