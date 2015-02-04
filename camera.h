@@ -1,4 +1,7 @@
-class camera::object
+#ifndef CAMERA_H
+#define CAMERA_H
+
+class Camera : Object
 {
 public:
 protected:
@@ -8,3 +11,5 @@ protected:
 	int m_height;
 	double m_angle;
 };
+
+#endif

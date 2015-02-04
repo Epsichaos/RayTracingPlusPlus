@@ -1,3 +1,6 @@
+#ifndef SCENE_H
+#define SCENE_H
+
 class Scene
 {
 public:
@@ -10,3 +13,5 @@ protected:
 	m_objectNumber;
 	object* arrayOfObjects;
 };
+
+#endif

@@ -1,4 +1,9 @@
-class mesh::object
+#ifndef MESH_H
+#define MESH_H
+
+class Mesh : Object
 {
 
 };
+
+#endif

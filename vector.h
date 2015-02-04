@@ -1,3 +1,6 @@
+#ifndef VECTOR_H
+#define VECTOR_H
+
 class vector
 {
 	protected:
@@ -5,3 +8,5 @@ class vector
 		double m_y;
 		double m_z;
 };
+
+#endif
