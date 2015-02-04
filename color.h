@@ -3,6 +3,10 @@
 
  class Color
  {
+ public:
+ 	double getRed();
+ 	double getBlue();
+ 	double getGreen();
  protected:
  	double m_R;
  	double m_V;

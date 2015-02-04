@@ -1,12 +1,12 @@
 lancer_rayon(ray rayon, scene scene, int current_depth)
 {
-	color pixel_color;
+	Color pixel_color;
 	int number_of_objects=0;
 	int indice_closest;
-	color color_point;
+	Color color_point;
 	number_of_objects = scene.getNumberOfObjects();
-	object* objets = new object[number_of_objects];
-	point* intersections = new point[number_of_objects];
+	Object* objets = new object[number_of_objects];
+	Point* intersections = new point[number_of_objects];
 	scene.getObjects(objets);
 	for(int i=0;i<number_of_objects;i++)
 	{
@@ -26,6 +26,7 @@ lancer_rayon(ray rayon, scene scene, int current_depth)
 		this_difuse_color *= lights[j].getColor;
 		difuse_color+=this_difuse_color;
 	}
+	return difuse_color;
 
 	/*
 	if(objets[indice_closest].hasReflexion())
@@ -42,8 +43,9 @@ lancer_rayon(ray rayon, scene scene, int current_depth)
 	*/
 
 }
-void tabToBMP(double r, double v, double b, int w, int h, string path)
+void tabToBMP(Color *image, int w, int h, string path)
 {
+	int r,v,b;
 	FILE *f;
 	unsigned char *img = NULL;
 	int filesize = 54 + 3*w*h;  //w is your image width, h is image height, both int
@@ -57,9 +59,9 @@ void tabToBMP(double r, double v, double b, int w, int h, string path)
 		for(int j=0; j<h; j++)
 		{
 			x=i; y=(yres-1)-j;
-			r = red[i][j]*255;
-			g = green[i][j]*255;
-			b = blue[i][j]*255;
+			r = image[i*h+j].getRed()*255;
+			g = image[i*h+j].getGreen()*255;
+			b = image[i*h+j].getBlue()*255;
 			if (r > 255) r=255;
 			if (g > 255) g=255;
 			if (b > 255) b=255;
@@ -96,4 +98,25 @@ void tabToBMP(double r, double v, double b, int w, int h, string path)
 		fwrite(bmppad,1,(4-(w*3)%4)%4,f);
 	}
 	fclose(f);
+}
+
+double operator*(Vector const& a, Vector const& b)
+{
+	return (a.getX()*b.getX()+a.getY()*b.getY()+a.getZ()*b.getZ());
+}
+Vector operator+(Vector const& a, Vector const& b)
+{
+	Vector c(a.getX()+b.getX(), a.getY()+b.getY(), a.getZ()+b.getZ());
+	return c;
+
+}
+Color operator+(Color const& a, Color const& b)
+{
+	Color c(a.getGreen()+b.getGreen(),a.getRed()+b.getRed(),a.getBlue()+b.getBlue());
+	return c;
+}
+Color operator*(Color const& a, Color const& b)
+{
+	Color c(a.getGreen()*b.getGreen(),a.getRed()*b.getRed(),a.getBlue()*b.getBlue());
+	return c;
 }
