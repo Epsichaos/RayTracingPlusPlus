@@ -38,4 +38,10 @@ void Cube::setCube(Point p1, Point p2, Point p3, Point p4, Point p5, Point p6, P
 void Cube::printCube() {
     m_p1.printPoint();
     m_p2.printPoint();
+    m_p3.printPoint();
+    m_p4.printPoint();
+    m_p5.printPoint();
+    m_p6.printPoint();
+    m_p7.printPoint();
+    m_p8.printPoint();
 }

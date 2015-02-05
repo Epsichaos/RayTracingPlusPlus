@@ -22,6 +22,6 @@ void Sphere::setRadius(double radius) {
 }
 
 void Sphere::printSphere() {
-    cout << "La sphere : " << m_radius << endl;
+    cout << "La sphere a pour rayon " << m_radius << " et pour centre ";
     m_center.printPoint();
 }

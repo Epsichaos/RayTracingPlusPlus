@@ -10,8 +10,13 @@
 #include "point.h"
 #include "color.h"
 #include "scene.h"
+#include "light.h"
 
 using namespace std;
+
+int Scene::getNumberOfObjects() {
+    return m_objectNumber;
+}
 
 void Scene::loadScene(const string path) {
 
@@ -40,6 +45,17 @@ void Scene::loadScene(const string path) {
 
     Color color_object;
 
+
+    Object *arrayOfObjects;
+    Sphere *arrayOfSphere;
+    Cube *arrayOfCube;
+    //Camera *arrayOfCamera = new Camera[nb_camera];
+    Light *arrayOfLight = new Light[nb_light];
+
+   Sphere spr;
+   Cube cu;
+   Light li;
+
     string file_name = "input";
     ifstream file_img;
     file_img.open(file_name.c_str());
@@ -51,7 +67,7 @@ void Scene::loadScene(const string path) {
         // Boucle sur les lignes
         while(getline(file_img, line_img)) {
             numberOfObjects++;
-            cout << line_img << endl;
+            //cout << line_img << endl;
             line_img_str = line_img.c_str();
             if(line_img_str[0]=='s'&&line_img_str[1]=='p') {
                 nb_sphere++;
@@ -67,11 +83,10 @@ void Scene::loadScene(const string path) {
             }
         }
 
-        Object *arrayOfObjects = new Object[numberOfObjects];
-        Sphere *arrayOfSphere = new Sphere[nb_sphere];
-        Cube *arrayOfCube = new Cube[nb_cube];
-        Camera *arrayOfCamera = new Camera[nb_camera];
-        Light *arrayOfLight = new Light[nb_light];
+        arrayOfObjects = new Object[numberOfObjects];
+        arrayOfSphere = new Sphere[nb_sphere];
+        arrayOfCube = new Cube[nb_cube];
+        arrayOfLight = new Light[nb_light];
 
         file_img.clear();
         file_img.seekg(0, file_img.beg);
@@ -80,13 +95,15 @@ void Scene::loadScene(const string path) {
             line_size = line_img.size();
                 // Si la ligne est de type sphere
             if(line_img_str[0]=='s'&&line_img_str[1]=='p') {
-                //Sphere spr;
                 sscanf(line_img_str, "sp (%f %f %f) %f (%f %f %f)", &nb_1, &nb_2, &nb_3, &radius, &color_R, &color_V, &color_B);
                 center.setPoint(nb_1, nb_2, nb_3);
-                arrayOfSphere[comp_sp].setCenter(center);
+                spr.setCenter(center);
+                spr.setRadius(radius);
                 color_object.setColor(color_R, color_V, color_B);
-                arrayOfSphere[comp_sp].setColorObject(color_object);
-                arrayOfSphere[comp_sp].setTypeObject("sphere");
+                spr.setColorObject(color_object);
+                spr.setTypeObject("sphere");
+                comp_sp++;
+                arrayOfSphere[comp_sp] = spr;
                 arrayOfSphere[comp_sp].printSphere();
                 comp_sp++;
             }
@@ -101,24 +118,36 @@ void Scene::loadScene(const string path) {
                 ar_6.setPoint(cp6_1, cp6_2, cp6_3);
                 ar_7.setPoint(cp7_1, cp7_2, cp7_3);
                 ar_8.setPoint(cp8_1, cp8_2, cp8_3);
-                arrayOfCube[comp_cu].setCube(ar_1, ar_2, ar_3, ar_4, ar_5, ar_6, ar_7, ar_8);
+                cu.setCube(ar_1, ar_2, ar_3, ar_4, ar_5, ar_6, ar_7, ar_8);
                 color_object.setColor(color_R, color_V, color_B);
-                arrayOfCube[comp_cu].setColorObject(color_object);
-                arrayOfCube[comp_cu].setTypeObject("cube");
+                cu.setColorObject(color_object);
+                cu.setTypeObject("cube");
+                arrayOfCube[comp_cu] = cu;
+                arrayOfCube[comp_cu].printCube();
                 comp_cu++;
             }
+            /*
             // si la ligne est de type camera
             if(line_img_str[0]=='c'&&line_img_str[1]=='a') {
                 sscanf(line_img_str, "ca (%f %f %f) (%f %f %f) %s", );
                 arrayOfCamera[comp_ca].setCamera();
                 arrayOfCamera[comp_ca].setTypeObject("camera");
             }
+            */
             // si la ligne est de type light
             if(line_img_str[0]=='l'&&line_img_str[1]=='i') {
                 sscanf(line_img_str, "li (%f %f %f) %f (%f %f %f)", &cp1_1, &cp1_2, &cp1_3, &nb_1, &color_R, &color_V, &color_B);
-                arrayOfLight[comp_li].setLight();
-                arrayOfLight[comp_li].setTypeObject("light");
+                center.setPoint(cp1_1, cp1_2, cp1_3);
+                li.setCenter(center);
+                li.setIntensity(nb_1);
+                li.setTypeObject("light");
+                color_object.setColor(color_R, color_V, color_B);
+                li.setColorObject(color_object);
+                arrayOfLight[comp_li] = li;
+                arrayOfLight[comp_li].printLight();
+                comp_li++;
             }
+            /*
             for(i=0; i<nb_sphere; i++) {
                 arrayOfObjects[comp_ob] = arrayOfSphere[i];
                 comp_ob++;
@@ -126,9 +155,27 @@ void Scene::loadScene(const string path) {
             for(i=0; i<nb_cube; i++) {
                 arrayOfObjects[comp_ob] = arrayOfCube[i];
             }
+            */
+            /*
+            for(i=0; i<nb_camera; i++) {
+                arrayOfObjects[comp_ob] = arrayOfCamera[i];
+            }
+            for(i=0; i<nb_light; i++) {
+                arrayOfObjects[comp_ob] = arrayOfLight[i];
+            }
+            */
+            m_arrayOfObjects = new Object[numberOfObjects];
+            m_arrayOfObjects = arrayOfObjects;
         }
     }
     else {
         cerr << "Error when opening input file" << endl;
     }
+    /*
+    m_arrayOfObjects = new Object[numberOfObjects];
+    m_arrayOfObjects = arrayOfObjects;
+    */
+
+    m_objectNumber = numberOfObjects;
+
 }
