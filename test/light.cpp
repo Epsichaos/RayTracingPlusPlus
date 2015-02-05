@@ -7,7 +7,7 @@ void Light::setSource(Point source) {
     m_source = source;
 }
 
-void Light::setIntensity(float intensity) {
+void Light::setIntensity(double intensity) {
     m_intensity = intensity;
 }
 
