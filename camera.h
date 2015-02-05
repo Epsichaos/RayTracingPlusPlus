@@ -1,12 +1,20 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-class Camera : Object
-{
+#include "vector.h"
+#include "object.h"
+#include "point.h"
+
+class Camera : public Object {
 public:
+	void setPosition(Point);
+	void setDirection(Vector);
+	void setSize(int, int);
+	void setAngle(double);
+	void printCamera();
 protected:
-	point m_position;
-	vector direction;
+	Point m_position;
+	Vector m_direction;
 	int m_width;
 	int m_height;
 	double m_angle;

@@ -8,7 +8,7 @@ class Light : public Object
 {
 public:
 	void setSource(Point);
-	void setIntensity(float);
+	void setIntensity(double);
 	void printLight();
 protected:
 	Point m_source;
