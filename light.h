@@ -1,11 +1,17 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
-class Light : Object
+#include "object.h"
+#include "point.h"
+
+class Light : public Object
 {
+public:
+	void setSource(Point);
+	void setIntensity(float);
+	void printLight();
 protected:
-	point m_source;
-	color m_color;
+	Point m_source;
 	double m_intensity;
 };
 
