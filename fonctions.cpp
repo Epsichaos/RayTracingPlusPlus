@@ -100,6 +100,7 @@ void tabToBMP(Color *image, int w, int h, string path)
 	fclose(f);
 }
 
+
 double operator*(Vector const& a, Vector const& b)
 {
 	return (a.getX()*b.getX()+a.getY()*b.getY()+a.getZ()*b.getZ());
@@ -119,4 +120,28 @@ Color operator*(Color const& a, Color const& b)
 {
 	Color c(a.getGreen()*b.getGreen(),a.getRed()*b.getRed(),a.getBlue()*b.getBlue());
 	return c;
+}
+
+
+Point computeIntersection(Ray rayon, Object objet)
+{
+	if(Object.getType()==Sphere)
+	{
+
+		int a=rayon.getDirection()*rayon.getDirection();
+		int b = rayon.getDirection().getX()*rayon.getStart().getX()+rayon.getDirection().getY()*rayon.getStart().getY()+rayon.getDirection().getZ()*rayon.getStart().getZ();
+		int c= rayon.getStart().getX()*rayon.getStart().getX()+rayon.getStart().getY()*rayon.getStart().getY()+rayon.getStart().getZ()*rayon.getStart().getZ();
+		r = objet::Sphere.getRadius();
+		c-=r*r;
+		delta = b*b-4*a*c;
+		if(delta>0)
+		{
+			t1=(-b-sqrt(delta))/2/a;
+			t2=(-b+sqrt(delta))/2/a;
+		}
+		if(delta==0)
+			t = -b/2/a;
+		else
+			
+	}
 }

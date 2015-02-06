@@ -12,6 +12,11 @@ class Point
 		Point(double, double, double);
 		void setPoint(double, double, double);
 		void printPoint();
+		double getX();
+		double getY();
+		double getZ();
+		double distance();
+
 };
 
 #endif

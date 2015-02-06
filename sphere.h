@@ -14,6 +14,7 @@ public:
 	Sphere(Point, double);
 	void setCenter(Point);
 	void setRadius(double);
+	double getRadius();
 };
 
 #endif
