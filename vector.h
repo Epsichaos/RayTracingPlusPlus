@@ -5,9 +5,9 @@ class Vector {
 public:
 	Vector();
 	Vector(double, double, double);
-	double getX();
-	double getY();
-	double getZ();
+	double x();
+	double y();
+	double z();
 	void setVector(double, double, double);
 protected:
 	double m_x;
