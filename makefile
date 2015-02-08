@@ -8,6 +8,7 @@ CS = $(wildcard *.cpp)
 OS = $(CS:.cpp=.o)
 
 all: $(PRGM)
+	@rm -Rf *.o
 
 $(PRGM): $(OS)
 	clang++ $(FLAGS) $^ -o $@

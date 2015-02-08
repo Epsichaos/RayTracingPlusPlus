@@ -18,6 +18,7 @@ protected:
 public:
 	Cube();
 	Cube(Point, Point, Point, Point, Point, Point, Point, Point);
+	void setCube(Point, Point, Point, Point, Point, Point, Point, Point);
 	void printCube();
 };
 

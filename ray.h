@@ -3,11 +3,10 @@
 
 class ray
 {
-	vector getDirection();
-	Point getStart();
+	vector direction();
 protected:
-	Point m_start;
-	Vector m_direction;
+	point m_start;
+	vector m_direction;
 };
 
 #endif
