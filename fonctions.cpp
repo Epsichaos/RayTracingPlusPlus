@@ -1,4 +1,21 @@
-lancer_rayon(ray rayon, scene scene, int current_depth)
+void render(Scene const& Mainscene, Color* image int width, int height)
+{
+	int i,j;
+	double tabX,tabY; // Ces tableaux doivent contenir la position du centre des cases
+	ray rayon_init;
+	for(i=0;i<height)
+	{
+		for (j = 0; i < width; ++j)
+		{
+			rayon_init.setStart(Mainscene.getActiveCamera().getPosition());
+			rayon_init.setDirection(tabX[i][j]-Mainscene.getActiveCamera().getPosition().x(), tabY[i][j]-Mainscene.getActiveCamera().getPosition().y()); // en X puis en Y
+			image[i][j]=lancer_rayon(rayon_init, Mainscene,0);
+		}
+	}
+	
+}
+
+Color lancer_rayon(ray rayon, scene scene, int current_depth)
 {
 	Color pixel_color;
 	int number_of_objects=0;

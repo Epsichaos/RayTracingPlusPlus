@@ -10,6 +10,9 @@ class Point
 	public:
 		Point();
 		Point(double, double, double);
+		double x();
+		double y();
+		double z();
 		void setPoint(double, double, double);
 		void printPoint();
 };

@@ -9,8 +9,8 @@ int main()
 	Scene main_scene;
 	Color *image = new Color[HEIGHT*WIDTH];
 	main_scene.loadScene("example/sample01.txt");
-	render(main_scene,image);
+	render(main_scene,image, WIDTH, HEIGHT);
 	getSeparatedRVB(image, r,v,b);
-	tabToBMP(WIDTH,HEIGHT,"output/sample01.bmp")
+	tabToBMP(image,WIDTH,HEIGHT,"output/sample01.bmp")
 	delete image[];
 }
