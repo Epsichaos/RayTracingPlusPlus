@@ -142,14 +142,14 @@ Color operator*(Color const& a, Color const& b)
 
 Point computeIntersection(Ray rayon, Object objet)
 {
-	if(Object.getType()==Sphere)
+	if(Object.getType()=="sphere")
 	{
-
-		int a=rayon.getDirection()*rayon.getDirection();
+		double t1,t2,
+		int a = rayon.getDirection()*rayon.getDirection();
 		int b = rayon.getDirection().getX()*rayon.getStart().getX()+rayon.getDirection().getY()*rayon.getStart().getY()+rayon.getDirection().getZ()*rayon.getStart().getZ();
-		int c= rayon.getStart().getX()*rayon.getStart().getX()+rayon.getStart().getY()*rayon.getStart().getY()+rayon.getStart().getZ()*rayon.getStart().getZ();
+		int c = rayon.getStart().getX()*rayon.getStart().getX()+rayon.getStart().getY()*rayon.getStart().getY()+rayon.getStart().getZ()*rayon.getStart().getZ();
 		r = objet::Sphere.getRadius();
-		c-=r*r;
+		c -= r*r;
 		delta = b*b-4*a*c;
 		if(delta>0)
 		{

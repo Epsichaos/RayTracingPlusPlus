@@ -12,6 +12,7 @@ class Object
 public:
 	Color getColor(Point input_point);
 	Color getColor();
+	std::string getType(std::string input);
 	void setColorObject(Color);
 	void setTypeObject(std::string);
 protected:
