@@ -118,15 +118,34 @@ void tabToBMP(Color *image, int w, int h, string path)
 }
 
 
+Point operator+(Point const& a, Vector const& b)
+{
+	Point c(a.x()+b.x(), a.y()+b.y(), a.z()+b.z());
+	return c;
+}
+Point operator+(Vector const& a, Point const& b)
+{
+	Point c(a.x()+b.x(), a.y()+b.y(), a.z()+b.z());
+	return c;
+}
+Vector operator*(Vector const& a, float const& b)
+{
+	Vector c(a.x()*b, a.y()*b, a.z()*b);
+	return c;
+}
+Vector operator*(float const& b, Vector const& a)
+{
+	Vector c(a.x()*b, a.y()*b, a.z()*b);
+	return c;
+}
 double operator*(Vector const& a, Vector const& b)
 {
-	return (a.getX()*b.getX()+a.getY()*b.getY()+a.getZ()*b.getZ());
+	return (a.x()*b.x()+a.y()*b.y()+a.z()*b.z());
 }
 Vector operator+(Vector const& a, Vector const& b)
 {
-	Vector c(a.getX()+b.getX(), a.getY()+b.getY(), a.getZ()+b.getZ());
+	Vector c(a.x()+b.x(), a.y()+b.y(), a.z()+b.z());
 	return c;
-
 }
 Color operator+(Color const& a, Color const& b)
 {
@@ -146,8 +165,8 @@ Point computeIntersection(Ray rayon, Object objet)
 	{
 		double t1,t2,
 		int a = rayon.getDirection()*rayon.getDirection();
-		int b = rayon.getDirection().getX()*rayon.getStart().getX()+rayon.getDirection().getY()*rayon.getStart().getY()+rayon.getDirection().getZ()*rayon.getStart().getZ();
-		int c = rayon.getStart().getX()*rayon.getStart().getX()+rayon.getStart().getY()*rayon.getStart().getY()+rayon.getStart().getZ()*rayon.getStart().getZ();
+		int b = rayon.getDirection().x()*rayon.getStart().x()+rayon.getDirection().y()*rayon.getStart().y()+rayon.getDirection().z()*rayon.getStart().z();
+		int c = rayon.getStart().x()*rayon.getStart().x()+rayon.getStart().y()*rayon.getStart().y()+rayon.getStart().z()*rayon.getStart().z()-;
 		r = objet::Sphere.getRadius();
 		c -= r*r;
 		delta = b*b-4*a*c;
@@ -155,10 +174,26 @@ Point computeIntersection(Ray rayon, Object objet)
 		{
 			t1=(-b-sqrt(delta))/2/a;
 			t2=(-b+sqrt(delta))/2/a;
+			if(t1>0)
+			{
+				t=t1;
+			}
+			else if(t1<0&& t2>0)
+			{
+				t=t2;
+			}
+			else
+			{
+				t=MAX_DISTANCE
+			}
+
 		}
 		if(delta==0)
 			t = -b/2/a;
 		else
+			t=MAX_DISTANCE;
+		Point A= rayon.getStart()+rayon.getDirection()*t;
+		return A;
 			
 	}
 }
