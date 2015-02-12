@@ -1,7 +1,16 @@
 void render(Scene const& Mainscene, Color* image int width, int height)
 {
 	int i,j;
-	double tabX,tabY; // Ces tableaux doivent contenir la position du centre des cases
+	double **tabX = new double* [height];	 // Ces tableaux 2D doivent contenir la position du centre des cases
+	double **tabY = new double* [height];
+	for (i = 0; i < height; ++i)
+	{
+		*tabX[i] = new double[width];
+		*tabY[i] = new double[width];
+	}
+
+	fill_tabX_tabY(tabX,tabY,Mainscene.getActiveCamera().getPosition(),Mainscene.getActiveCamera().getDirection());
+
 	ray rayon_init;
 	for(i=0;i<height)
 	{
@@ -14,7 +23,13 @@ void render(Scene const& Mainscene, Color* image int width, int height)
 	}
 	
 }
+void fill_tabX_tabY(double **tabX,double **tabY,Point camerapos,Vector cameradir)
+{
+	int i,j;
+	double pixel_size = 2*DIST_FROM_CAMERA*tan(2*3.1415926535/360*VIEWING_ANGLE);
+	VectorgetNormalVector(cameradir)
 
+}
 Color lancer_rayon(ray rayon, scene scene, int current_depth)
 {
 	Color pixel_color;
