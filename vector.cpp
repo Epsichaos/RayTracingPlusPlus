@@ -14,14 +14,14 @@ Vector::Vector(double x, double y, double z) {
     m_z = z;
 }
 
-double Vector::getX() {
+double Vector::x() {
     return m_x;
 }
 
-double Vector::getY() {
+double Vector::y() {
     return m_y;
 }
-double Vector::getZ() {
+double Vector::z() {
     return m_z;
 }
 
