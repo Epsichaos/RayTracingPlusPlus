@@ -1,17 +1,32 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "light.h"
+#include "camera.h"
+#include "cube.h"
+#include "sphere.h"
+
 class Scene
 {
 public:
-	void loadScene(const std::string path);
+	Scene(const std::string path);
 	int getNumberOfObjects();
+	int getNumberOfObjects(char*);
+	void debugTest();
 	//int getNumberOfObjects(enum m_type type);
 	//void getObjects(Object* input_array);
 	//void getObjects(Object* input_array, enum m_type type);
 protected:
 	int m_objectNumber;
-	Object* m_arrayOfObjects;
+	int m_sphereNumber;
+	int m_cameraNumber;
+	int m_cubeNumber;
+	int m_lightNumber;
+	//Object* m_arrayOfObjects;
+	Sphere *m_arrayOfSphere;
+	Cube *m_arrayOfCube;
+	Camera *m_arrayOfCamera;
+	Light *m_arrayOfLight;
 };
 
 #endif

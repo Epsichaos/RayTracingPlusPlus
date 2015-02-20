@@ -15,22 +15,16 @@
 
 using namespace std;
 
-int Scene::getNumberOfObjects() {
-    return m_objectNumber;
-}
-
-void Scene::loadScene(const string path) {
-
-    // variables pour compter le nombre des objects
-    int numberOfObjects = 0;
-    int nb_sphere = 0;
-    int nb_cube = 0;
-    int nb_camera = 0;
-    int nb_light = 0;
+Scene::Scene(const string path) {
+    // On initialise à 0 les compteurs d'objects
+    m_objectNumber = 0;
+    m_sphereNumber= 0;
+    m_lightNumber = 0;
+    m_cameraNumber = 0;
+    m_cubeNumber = 0;
 
     // pour le parcours des boucles
     int line_size = 0;
-    int i,j;
 
     // pour la sphere
     double nb_1, nb_2, nb_3, radius;
@@ -55,18 +49,8 @@ void Scene::loadScene(const string path) {
     int comp_ca = 0;
     int comp_li = 0;
 
-    // compteur total
-    int comp_ob = 0;
-
     // variable de couleur
     Color color_object;
-
-    // les arrays pour le stockage des objects
-    Object *arrayOfObjects;
-    Sphere *arrayOfSphere;
-    Cube *arrayOfCube;
-    Camera *arrayOfCamera = new Camera[nb_camera];
-    Light *arrayOfLight = new Light[nb_light];
 
     // les variables temporaires des objects
     Sphere spr;
@@ -75,7 +59,7 @@ void Scene::loadScene(const string path) {
     Camera ca;
 
     // options pour l'ouverture du fichier
-    string file_name = "input";
+    string file_name = path;
     ifstream file_img;
     file_img.open(file_name.c_str());
     const char* line_img_str;
@@ -85,27 +69,28 @@ void Scene::loadScene(const string path) {
         string line_img;
         // Boucle sur les lignes
         while(getline(file_img, line_img)) {
-            numberOfObjects++;
+            m_objectNumber++;
             line_img_str = line_img.c_str();
             // on compte le nombre d'objects de chaque type
             if(line_img_str[0]=='s'&&line_img_str[1]=='p') {
-                nb_sphere++;
+                m_sphereNumber++;
             }
             if(line_img_str[0]=='c'&&line_img_str[1]=='u') {
-                nb_cube++;
+                m_cubeNumber++;
             }
             if(line_img_str[0]=='c'&&line_img_str[1]=='a') {
-                nb_camera++;
+                m_cameraNumber++;
             }
             if(line_img_str[0]=='l'&&line_img_str[1]=='i') {
-                nb_light++;
+                m_lightNumber++;
             }
         }
 
-        arrayOfObjects = new Object[numberOfObjects];
-        arrayOfSphere = new Sphere[nb_sphere];
-        arrayOfCube = new Cube[nb_cube];
-        arrayOfLight = new Light[nb_light];
+        // On alloue la mémoire sur les variables de classe selon le nombre d'objects détectés
+        m_arrayOfSphere = new Sphere[m_sphereNumber];
+        m_arrayOfCube = new Cube[m_cubeNumber];
+        m_arrayOfLight = new Light[m_lightNumber];
+        m_arrayOfCamera = new Camera[m_cameraNumber];
 
         file_img.clear();
         file_img.seekg(0, file_img.beg);
@@ -121,9 +106,7 @@ void Scene::loadScene(const string path) {
                 color_object.setColor(color_R, color_V, color_B);
                 spr.setColorObject(color_object);
                 spr.setTypeObject("sphere");
-                comp_sp++;
-                arrayOfSphere[comp_sp] = spr;
-                arrayOfSphere[comp_sp].printSphere();
+                m_arrayOfSphere[comp_sp] = spr;
                 comp_sp++;
             }
             // si la ligne est de type cube
@@ -141,8 +124,7 @@ void Scene::loadScene(const string path) {
                 color_object.setColor(color_R, color_V, color_B);
                 cu.setColorObject(color_object);
                 cu.setTypeObject("cube");
-                arrayOfCube[comp_cu] = cu;
-                arrayOfCube[comp_cu].printCube();
+                m_arrayOfCube[comp_cu] = cu;
                 comp_cu++;
             }
             // si la ligne est de type camera
@@ -157,8 +139,7 @@ void Scene::loadScene(const string path) {
                 ca.setAngle(nb_1);
                 ca.setColorObject(color_object);
                 ca.setTypeObject("camera");
-                arrayOfCamera[comp_ca] = ca;
-                arrayOfCamera[comp_ca].printCamera();
+                m_arrayOfCamera[comp_ca] = ca;
                 comp_ca++;
             }
             // si la ligne est de type light
@@ -170,39 +151,38 @@ void Scene::loadScene(const string path) {
                 li.setTypeObject("light");
                 color_object.setColor(color_R, color_V, color_B);
                 li.setColorObject(color_object);
-                arrayOfLight[comp_li] = li;
-                arrayOfLight[comp_li].printLight();
+                m_arrayOfLight[comp_li] = li;
                 comp_li++;
             }
-            /*
-            for(i=0; i<nb_sphere; i++) {
-                arrayOfObjects[comp_ob] = arrayOfSphere[i];
-                comp_ob++;
-            }
-            for(i=0; i<nb_cube; i++) {
-                arrayOfObjects[comp_ob] = arrayOfCube[i];
-            }
-            */
-            /*
-            for(i=0; i<nb_camera; i++) {
-                arrayOfObjects[comp_ob] = arrayOfCamera[i];
-            }
-            for(i=0; i<nb_light; i++) {
-                arrayOfObjects[comp_ob] = arrayOfLight[i];
-            }
-            */
-            m_arrayOfObjects = new Object[numberOfObjects];
-            m_arrayOfObjects = arrayOfObjects;
         }
     }
+    // Message d'erreur en cas d'ouverture impossible
     else {
         cerr << "Error when opening input file" << endl;
     }
-    /*
-    m_arrayOfObjects = new Object[numberOfObjects];
-    m_arrayOfObjects = arrayOfObjects;
-    */
+}
 
-    m_objectNumber = numberOfObjects;
+int Scene::getNumberOfObjects() {
+    return m_objectNumber;
+}
 
+// Fonction de debug temporaire
+void Scene::debugTest() {
+    cout << "Nombre objects = " << m_objectNumber << endl;
+    cout << "Nombre lights = " << m_lightNumber << endl;
+    cout << "Nombre camera = " << m_cameraNumber << endl;
+    cout << "Nombre cube = " << m_cubeNumber << endl;
+    cout << "Nombre sphere = " << m_sphereNumber << endl;
+    for(int i=0; i<m_sphereNumber; i++) {
+        m_arrayOfSphere[i].printSphere();
+    }
+    for(int i=0; i<m_cameraNumber; i++) {
+        m_arrayOfCamera[i].printCamera();
+    }
+    for(int i=0; i<m_cubeNumber; i++) {
+        m_arrayOfCube[i].printCube();
+    }
+    for(int i=0; i<m_lightNumber; i++) {
+        m_arrayOfLight[i].printLight();
+    }
 }

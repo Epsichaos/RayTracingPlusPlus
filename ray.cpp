@@ -1,4 +1,8 @@
-vector Ray::getDirection()
+#include "ray.h"
+#include "point.h"
+#include "vector.h"
+
+Vector Ray::getDirection()
 {
 	return m_direction;
 }

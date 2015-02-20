@@ -1,7 +1,10 @@
 #ifndef RAY_H
 #define RAY_H
 
-class ray
+#include "vector.h"
+#include "point.h"
+
+class Ray
 {
 public:
 	Ray();
