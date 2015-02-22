@@ -4,8 +4,7 @@
 #include "vector.h"
 #include "point.h"
 
-class Ray
-{
+class Ray {
 public:
 	Ray();
 	Ray(Point const A, Vector const B);

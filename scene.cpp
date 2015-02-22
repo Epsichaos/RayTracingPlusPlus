@@ -166,6 +166,26 @@ int Scene::getNumberOfObjects() {
     return m_objectNumber;
 }
 
+// rajouter les test sur les conditions : comparaison de string c++
+int Scene::getNumberOfObjects(string str) {
+    string cam = "camera";
+    string lig = "light";
+    string cub = "cube";
+    string sphere = "sphere";
+    if() {
+        return m_sphereNumber;
+    }
+    if() {
+        return m_cubeNumber;
+    }
+    if() {
+        return m_lightNumber;
+    }
+    if() {
+        return m_cameraNumber;
+    }
+}
+
 // Fonction de debug temporaire
 void Scene::debugTest() {
     cout << "Nombre objects = " << m_objectNumber << endl;
