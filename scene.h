@@ -6,6 +6,10 @@
 #include "cube.h"
 #include "sphere.h"
 
+/*! \class Scene
+* \brief Contains the main scene description and all the objects included in.
+*
+*/
 class Scene
 {
 public:
