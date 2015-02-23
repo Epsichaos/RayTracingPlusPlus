@@ -1,5 +1,5 @@
 # RayTracingPlusPlus
-#*The soft story of the implementation of a RayTracer in C++*
+*The soft story of the implementation of a RayTracer in C++*
 
 ## Aim of the project
 
