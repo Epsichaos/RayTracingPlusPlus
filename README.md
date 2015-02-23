@@ -13,7 +13,7 @@ At the moment, the project is under development and the code cannot be use.
 
 *The MIT License (MIT)*
 
-### Copyright (c) 2014 Epsichaos/Titif26
+### Copyright (c) 2014 Epsichaos & Titif26
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
