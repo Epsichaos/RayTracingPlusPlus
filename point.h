@@ -6,6 +6,10 @@
 * \brief File which contains the class Point and all the variables and functions associated
 */
 
+/*!
+* \class Point
+* \brief Define a point in a 3D Space
+*/
 class Point
 {
 	protected:
