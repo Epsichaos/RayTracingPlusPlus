@@ -5,6 +5,14 @@
 
 using namespace std;
 
+Camera::Camera(Point position, Vector direction, int width, int height, double angle) {
+    m_position = position;
+    m_direction = direction;
+    m_width = width;
+    m_height = height;
+    m_angle = angle;
+}
+
 void Camera::setPosition(Point position) {
     m_position = position;
 }
