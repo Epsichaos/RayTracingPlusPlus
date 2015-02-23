@@ -6,6 +6,11 @@
 #include "cube.h"
 #include "sphere.h"
 
+/*!
+* \file scene.h
+* \brief File which contains the class Scene and all the variables and functions associated
+*/
+
 /*! \class Scene
 * \brief Contains the main scene description and all the objects included in.
 * This class will be used to store all the objects present in the input file.

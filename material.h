@@ -3,6 +3,11 @@
 
 #include "color.h"
 
+/*!
+* \file material.h
+* \brief File which contains the class Material and all the variables and functions associated
+*/
+
 class Material
 {
  protected:

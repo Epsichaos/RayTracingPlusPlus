@@ -7,6 +7,11 @@
 #include "struct.h"
 #include <string>
 
+/*!
+* \file object.h
+* \brief File which contains the class Object and all the variables and functions associated
+*/
+
 /*! \class Object
 * \brief Class used to store objects.
 * Objects can be everything : sphere, cubes, or whatever. This class will most of the time not be used. We will use the

@@ -4,6 +4,11 @@
 #include "object.h"
 #include "point.h"
 
+/*!
+* \file sphere.h
+* \brief File which contains the class Sphere and all the variables and functions associated
+*/
+
 class Sphere : public Object
 {
 protected:

@@ -1,6 +1,11 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+/*!
+* \file vector.h
+* \brief File which contains the class Vector and all the variables and functions associated
+*/
+
 class Vector {
 public:
 	Vector();

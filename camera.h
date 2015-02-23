@@ -5,6 +5,10 @@
 #include "object.h"
 #include "point.h"
 
+/*!
+* \file camera.h
+* \brief File which contains the class Camera and all the variables and functions associated
+*/
 
 /*! \class Camera
 * \brief Contains the description of a Camera object

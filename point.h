@@ -1,6 +1,11 @@
 #ifndef POINT_H
 #define POINT_H
 
+/*!
+* \file point.h
+* \brief File which contains the class Point and all the variables and functions associated
+*/
+
 class Point
 {
 	protected:

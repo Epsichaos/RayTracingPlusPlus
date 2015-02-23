@@ -2,6 +2,11 @@
 #define COLOR_H
 
 /*!
+* \file color.h
+* \brief File which contains the class Color and all the variables and functions associated
+*/
+
+/*!
 * \class Color
 * \brief Define what a color is. A color will be considered with its RGB code
 */

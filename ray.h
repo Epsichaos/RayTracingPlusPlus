@@ -4,6 +4,11 @@
 #include "vector.h"
 #include "point.h"
 
+/*!
+* \file ray.h
+* \brief File which contains the class Ray and all the variables and functions associated
+*/
+
 class Ray {
 public:
 	Ray();
