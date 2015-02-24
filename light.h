@@ -17,7 +17,17 @@
 class Light : public Object
 {
 public:
+	/*!
+	* \fn setSource(Point pt)
+	* \brief Set the new source point of the light
+	* \param pt the new source of the light
+	*/
 	void setSource(Point);
+	/*!
+	* \fn setIntensity(double intens)
+	* \brief Set the new intensity of the light
+	* \param intens the new intensity
+	*/
 	void setIntensity(double);
 	void printLight();
 protected:

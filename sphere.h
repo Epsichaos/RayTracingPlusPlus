@@ -9,15 +9,45 @@
 * \brief File which contains the class Sphere and all the variables and functions associated
 */
 
+/*!
+* \class Sphere
+* \brief File which contains the class Sphere and all the variables and functions associated
+*/
 class Sphere : public Object
 {
 protected:
+	/*!
+	* \brief Center of the sphere
+	*/
 	Point m_center;
+	/*!
+	* \brief Radius of the sphere
+	*/
 	double m_radius;
 public:
+	/*!
+	* \fn  Sphere()
+	* \brief Defaut constructor of a sphere object
+	*/
 	Sphere();
+	/*!
+	* \fn Sphere(Point pt, double radius)
+	* \brief Constructor of a sphere object
+	* \param pt the center of the sphere
+	* \param radius the radius of the sphere
+	*/
 	Sphere(Point, double);
+	/*!
+	* \fn setCenter(Point pt)
+	* \brief Define the new center of the sphere
+	* \param pt the new center of the sphere
+	*/
 	void setCenter(Point);
+	/*!
+	* \fn setRadius(double radius)
+	* \brief Define the new radius of the sphere
+	* \param radius the new radius
+	*/
 	void setRadius(double);
 	void printSphere();
 };
