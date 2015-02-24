@@ -17,3 +17,15 @@ void Color::setColor(double red, double green, double blue) {
     m_V = green;
     m_B = blue;
 }
+
+double Color::getRed() {
+    return m_R;
+}
+
+double Color::getGreen() {
+    return m_V;
+}
+
+double Color::getBlue() {
+    return m_B;
+}

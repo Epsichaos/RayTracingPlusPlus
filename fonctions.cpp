@@ -1,3 +1,17 @@
+#include <maths.h>
+#include <string>
+#include <iostream>
+#include "scene.h"
+#include "ray.h"
+#include "object.h"
+#include "vector.h"
+#include "point.h"
+#include "color.h"
+#include "camera.h"
+#include "cube.h"
+#include "light.h"
+#include "sphere.h"
+
 void render(Scene const& Mainscene, Color* image int width, int height)
 {
 	int i,j;
@@ -21,7 +35,7 @@ void render(Scene const& Mainscene, Color* image int width, int height)
 			image[i][j]=lancer_rayon(rayon_init, Mainscene,0);
 		}
 	}
-	
+
 }
 void fill_tabX_tabY(double **tabX,double **tabY,Point camerapos,Vector cameradir)
 {
@@ -51,7 +65,7 @@ Color lancer_rayon(ray rayon, scene scene, int current_depth)
 	light* lights = new light[number_of_lights];
 	vector normale = objets[indice_closest].computeNormale(intersections[indice_closest]);
 	for(int j=0;j<number_of_lights;j++)
-	{ 
+	{
 		shadow_factor = computeShadow(intersections[indice_closest], objets[indice_closest],lights[j]); // penser à mettre l'atténuation dedans
 		vector ray_to_light = lights[j].computeRayToLight(intersections[indice_closest]);
 		this_difuse_color *= shadow_factor*(raytolight*normale)*objets[indice_closest].GetDiffuseFactor();
@@ -70,7 +84,7 @@ Color lancer_rayon(ray rayon, scene scene, int current_depth)
 	}
 	if(objets[indice_closest].hasRefraction())
 	{
-		
+
 	}
 	*/
 
@@ -209,6 +223,6 @@ Point computeIntersection(Ray rayon, Object objet)
 			t=MAX_DISTANCE;
 		Point A= rayon.getStart()+rayon.getDirection()*t;
 		return A;
-			
+
 	}
 }

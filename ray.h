@@ -30,20 +30,27 @@ public:
 	/*!
 	* \fn getDirection()
 	* \brief Accessor to the direction of the ray
+	* \return The direction of the ray
 	*/
 	Vector getDirection();
 	/*!
-	* \fn setStart(Point const pt)
-	* \brief Set the new start point of the ray
-	* \param pt the new start point
+	* \fn getStart()
+	* \brief Accessor to the origin of the ray
+	* \return The point origin of the ray
 	*/
-	void setStart(Point const A);
+	Point getStart();
 	/*!
 	* \fn setDirection(vector const vect)
 	* \brief Set the new direction of the ray
 	* \param vect the new vector direction
 	*/
 	void setDirection(Vector const A);
+	/*!
+	* \fn setStart(Point const pt)
+	* \brief Set the new start point of the ray
+	* \param pt the new start point
+	*/
+	void setStart(Point const A);
 protected:
 	/*!
 	* \brief Origin of the ray

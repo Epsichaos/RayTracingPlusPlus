@@ -39,8 +39,29 @@
      Color(double, double, double);
      /*!
      * \brief Allow the user to change the caracteristics of the color
+     * \param R the R-value of the color
+     * \param G the G-value of the color
+     * \param B the B-value of the color
      */
      void setColor(double, double, double);
+     /*!
+     * \fn getRed()
+     * \brief Fonction to get the R-value of the color
+     * \return The R-Value
+     */
+     double getRed();
+     /*!
+     * \fn getGreen()
+     * \brief Fonction to get the G-value of the color
+     * \return The G-Value
+     */
+     double getGreen();
+     /*!
+     * \fn getBlue()
+     * \brief Fonction to get the B-value of the color
+     * \return The B-Value
+     */
+     double getBlue();
  };
 
  #endif

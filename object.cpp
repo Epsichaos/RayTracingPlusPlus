@@ -30,3 +30,21 @@ void Object::setTypeObject(string str) {
         m_type = 4;
     }
 }
+
+string Object::getType() {
+    if(m_type==0) {
+        return "camera";
+    }
+    if(m_type==1) {
+        return "light";
+    }
+    if(m_type==2) {
+        return "cube";
+    }
+    if(m_type==3) {
+        return "sphere";
+    }
+    if(m_type==4) {
+        return "mesh";
+    }
+}

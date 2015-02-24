@@ -40,6 +40,11 @@ public:
 	* \param Str. Str can be *camera*, *sphere*, *cube* or *light*
 	*/
 	void setTypeObject(std::string);
+	/*!
+	* \fn std::string getType()
+	* \brief return the type of the object
+	*/
+	std::string getType();
 protected:
 	//type_object m_type;
 	//enum m_type {Camera, Light, Cube, Sphere, Mesh};

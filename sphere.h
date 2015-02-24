@@ -38,6 +38,18 @@ public:
 	*/
 	Sphere(Point, double);
 	/*!
+	* \fn double getRadius()
+	* \brief Accessor to the radius of a sphere
+	* \return The Radius of the sphere
+	*/
+	double getRadius();
+	/*!
+	* \fn double getCenter()
+	* \brief Accessor to the center of a sphere
+	* \return The center of the sphere
+	*/
+	Point getCenter();
+	/*!
 	* \fn setCenter(Point pt)
 	* \brief Define the new center of the sphere
 	* \param pt the new center of the sphere
