@@ -47,6 +47,9 @@ public:
 	*/
 	void setAngle(double);
 	void printCamera();
+	double getAngle();
+	Point getPosition();
+	Vector getDirection();
 protected:
 	/*!
 	* \brief *Point* which define the center of the camera

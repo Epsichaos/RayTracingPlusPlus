@@ -78,7 +78,9 @@ protected:
 	*/
 	Light *m_arrayOfLight;
 	/*!
-	* \brief The id of the active camera in case where there are multiple cameras ( default : 0)
+<<<<<<< HEAD
+	* \brief The id of the active camera in the array of camera in case where there are multiple cameras ( default : 0)
+>>>>>>> almost finished
 	*/
 	int m_idActiveCamera;
 };

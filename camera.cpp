@@ -35,3 +35,15 @@ void Camera::printCamera() {
     m_position.printPoint();
     cout << " de taille " << m_width << "x" << m_height << endl;
 }
+double Camera::getAngle()
+{
+	return m_angle;
+}
+Point Camera::getPosition()
+{
+	return m_position;
+}
+Vector Camera::getDirection()
+{
+	return m_direction;
+}

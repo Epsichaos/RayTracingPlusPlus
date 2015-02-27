@@ -165,7 +165,11 @@ Scene::Scene(const string path) {
 int Scene::getNumberOfObjects() {
     return m_objectNumber;
 }
+<<<<<<< HEAD
 
+int Scene::getActiveCamera() {
+    return m_arrayOfCamera[m_idActiveCamera];
+}
 // rajouter les test sur les conditions : comparaison de string c++
 int Scene::getNumberOfObjects(string str) {
     string cam = "camera";
@@ -186,6 +190,7 @@ int Scene::getNumberOfObjects(string str) {
     }
 }
 
+>>>>>>> almost finished
 // Fonction de debug temporaire
 void Scene::debugTest() {
     cout << "Nombre objects = " << m_objectNumber << endl;

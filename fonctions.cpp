@@ -15,15 +15,16 @@
 void render(Scene const& Mainscene, Color* image int width, int height)
 {
 	int i,j;
-	double **tabX = new double* [height];	 // Ces tableaux 2D doivent contenir la position du centre des cases
-	double **tabY = new double* [height];
+	double **tabCenters = new Point* [height];	 // Ces tableaux 2D doivent contenir la position du centre des cases
 	for (i = 0; i < height; ++i)
 	{
-		*tabX[i] = new double[width];
-		*tabY[i] = new double[width];
+<<<<<<< HEAD
+		*tabCenters[i] = new Point[width];
+
 	}
 	Camera activeCamera = Mainscene.getActiveCamera();
-	fill_tabX_tabY(tabX,tabY,Mainscene.activeCamera.getPosition(),activeCamera.getDirection(),activeCamera.getAngle());
+	fill_tabX_tabY(tabCenters,activeCamera.getPosition(),activeCamera.getDirection(),activeCamera.getOrientationX(),activeCamera.getOrientationY(),width,height);
+>>>>>>> almost finished
 
 	ray rayon_init;
 	for(i=0;i<height)
@@ -37,12 +38,20 @@ void render(Scene const& Mainscene, Color* image int width, int height)
 	}
 
 }
-void fill_tabX_tabY(double **tabX,double **tabY,Point camerapos,Vector cameradir)
+void fill_tabX_tabY(Point **tabCenters,Point camerapos,Vector cameradir, Vector orientationX,Vector orientationY, int width, int height)
 {
 	int i,j;
 	double pixel_size = 2*DIST_FROM_CAMERA*tan(2*3.1415926535/360*VIEWING_ANGLE);
-	Vector getNormalVector(cameradir)
-
+<<<<<<< HEAD
+	Vector deltaX = pixel_size*orientationX, deltaY = pixel_size*orientationY;
+	for(i=0,i<height;i++)
+	{
+		for(j=0;j<width;i++)
+			{
+				tabCenters[i][j] = camerapos+cameradir*DIST_FROM_CAMERA+height/2*orientationY*pixel_size-i*pixel_size*orientationY-width/2*pixel_size*orientationX+j*orientationX*pixel_size+0.5*pixel_size*orientationX+0.5*pixel_size*orientationY;// à vérifier !!
+			}
+	}
+>>>>>>> almost finished
 }
 Color lancer_rayon(ray rayon, scene scene, int current_depth)
 {
