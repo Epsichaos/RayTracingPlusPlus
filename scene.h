@@ -26,6 +26,10 @@ public:
 	* \return The number of all the objects
 	*/
 	int getNumberOfObjects();
+		/*! \brief Accessor to the active camera
+	* \return A handler to the active Camera
+	*/
+	int getActiveCamera();
 	/*! \brief Accessor to one specific type of object
 	* \param str a string which contains the name of the class. **str** can be *light*, *camera*, *cube* or *sphere*
 	* \return The number of the objects of one specific class
@@ -73,6 +77,10 @@ protected:
 	* \brief Array which contains all the light objects
 	*/
 	Light *m_arrayOfLight;
+	/*!
+	* \brief The id of the active camera in case where there are multiple cameras ( default : 0)
+	*/
+	int m_idActiveCamera;
 };
 
 #endif

@@ -22,8 +22,8 @@ void render(Scene const& Mainscene, Color* image int width, int height)
 		*tabX[i] = new double[width];
 		*tabY[i] = new double[width];
 	}
-
-	fill_tabX_tabY(tabX,tabY,Mainscene.getActiveCamera().getPosition(),Mainscene.getActiveCamera().getDirection());
+	Camera activeCamera = Mainscene.getActiveCamera();
+	fill_tabX_tabY(tabX,tabY,Mainscene.activeCamera.getPosition(),activeCamera.getDirection(),activeCamera.getAngle());
 
 	ray rayon_init;
 	for(i=0;i<height)
@@ -41,7 +41,7 @@ void fill_tabX_tabY(double **tabX,double **tabY,Point camerapos,Vector cameradir
 {
 	int i,j;
 	double pixel_size = 2*DIST_FROM_CAMERA*tan(2*3.1415926535/360*VIEWING_ANGLE);
-	VectorgetNormalVector(cameradir)
+	Vector getNormalVector(cameradir)
 
 }
 Color lancer_rayon(ray rayon, scene scene, int current_depth)
