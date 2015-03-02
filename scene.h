@@ -29,7 +29,7 @@ public:
 		/*! \brief Accessor to the active camera
 	* \return A handler to the active Camera
 	*/
-	int getActiveCamera();
+	Camera getActiveCamera();
 	/*! \brief Accessor to one specific type of object
 	* \param str a string which contains the name of the class. **str** can be *light*, *camera*, *cube* or *sphere*
 	* \return The number of the objects of one specific class
@@ -39,6 +39,11 @@ public:
 	void debugTest();
 	//void getObjects(Object* input_array);
 	//void getObjects(Object* input_array, enum m_type type);
+	void getCameras(Camera *tab);
+	void getLights(Light *tab);
+	void getCubes(Cube *tab);
+	void getSpheres(Sphere *tab);
+
 protected:
 	/*!
 	* \brief Number of all the objects
@@ -78,9 +83,7 @@ protected:
 	*/
 	Light *m_arrayOfLight;
 	/*!
-<<<<<<< HEAD
 	* \brief The id of the active camera in the array of camera in case where there are multiple cameras ( default : 0)
->>>>>>> almost finished
 	*/
 	int m_idActiveCamera;
 };

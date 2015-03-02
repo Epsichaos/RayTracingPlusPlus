@@ -18,14 +18,14 @@ void Color::setColor(double red, double green, double blue) {
     m_B = blue;
 }
 
-double Color::getRed() {
+double Color::getRed() const{
     return m_R;
 }
 
-double Color::getGreen() {
+double Color::getGreen() const{
     return m_V;
 }
 
-double Color::getBlue() {
+double Color::getBlue() const{
     return m_B;
 }

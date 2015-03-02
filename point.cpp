@@ -24,15 +24,15 @@ void Point::setPoint(double x,double y, double z) {
 void Point::printPoint() {
     cout << "("<< m_x << "," << m_y << "," << m_z << ")" << endl;
 }
-double Point::x()
+double Point::x() const
 {
     return m_x;
 }
-double Point::y()
+double Point::y() const
 {
     return m_y;
 }
-double Point::z()
+double Point::z() const
 {
     return m_z;
 }

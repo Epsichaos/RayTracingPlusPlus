@@ -24,11 +24,12 @@ public:
 	* \param height an int which define the height of the camera
 	* \param angle a double which set the angle of the camera
 	*/
-	Camera(Point, Vector, int, int, double);
+	Camera(Point, Vector, int, int, double,Vector,Vector);
 	/*!
 	* \brief Allow the user to set or change the position of the camera
 	* \param pt a point which is the new position, the new center of the camera
 	*/
+	Camera();
 	void setPosition(Point);
 	/*!
 	* \brief Allow the user to set or change the direction of the camera
@@ -50,6 +51,8 @@ public:
 	double getAngle();
 	Point getPosition();
 	Vector getDirection();
+	Vector getOrientationX();
+	Vector getOrientationY();
 protected:
 	/*!
 	* \brief *Point* which define the center of the camera
@@ -71,6 +74,8 @@ protected:
 	* \brief *Angle* of the camera
 	*/
 	double m_angle;
+	Vector m_orientationX;
+	Vector m_orientationY;
 };
 
 #endif

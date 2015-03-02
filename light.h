@@ -30,6 +30,7 @@ public:
 	*/
 	void setIntensity(double);
 	void printLight();
+	Point getSource();
 protected:
 	/*!
 	* \brief Point source of the light

@@ -45,6 +45,7 @@ public:
 	* \brief return the type of the object
 	*/
 	std::string getType();
+	double getDiffuseFactor();
 protected:
 	//type_object m_type;
 	//enum m_type {Camera, Light, Cube, Sphere, Mesh};

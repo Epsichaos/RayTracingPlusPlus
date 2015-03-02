@@ -22,6 +22,7 @@ Scene::Scene(const string path) {
     m_lightNumber = 0;
     m_cameraNumber = 0;
     m_cubeNumber = 0;
+    m_idActiveCamera = 0;
 
     // pour le parcours des boucles
     int line_size = 0;
@@ -161,30 +162,62 @@ Scene::Scene(const string path) {
         cerr << "Error when opening input file" << endl;
     }
 }
-
+void Scene::getSpheres(Sphere *tab)
+{
+    int i;
+    for (i = 0; i < m_sphereNumber; ++i)
+    {
+        tab[i] = m_arrayOfSphere[i];
+    }
+}
+void Scene::getLights(Light *tab)
+{
+    int i;
+    for (i = 0; i < m_lightNumber; ++i)
+    {
+        tab[i] = m_arrayOfLight[i];
+    }
+}
+void Scene::getCameras(Camera *tab)
+{
+    int i;
+    for (i = 0; i < m_cameraNumber; ++i)
+    {
+        tab[i] = m_arrayOfCamera[i];
+    }
+}
+void Scene::getCubes(Cube *tab)
+{
+    int i;
+    for (i = 0; i < m_cubeNumber; ++i)
+    {
+        tab[i] = m_arrayOfCube[i];
+    }
+}
 int Scene::getNumberOfObjects() {
     return m_objectNumber;
 }
 
-int Scene::getActiveCamera() {
+Camera Scene::getActiveCamera() {
     return m_arrayOfCamera[m_idActiveCamera];
 }
-// rajouter les test sur les conditions : comparaison de string c++
-int Scene::getNumberOfObjects(string str) {
+// rajouter les test sur les conditions : comparaison de string c+
+int Scene::getNumberOfObjects(string str){
     string cam = "camera";
     string lig = "light";
     string cub = "cube";
     string sphere = "sphere";
-    if() {
+    // UTILISER UN SWITCH ICI <--- plus pro
+    if(str==sphere) {
         return m_sphereNumber;
     }
-    if() {
+    if(str==cub) {
         return m_cubeNumber;
     }
-    if() {
+    if(str==lig) {
         return m_lightNumber;
     }
-    if() {
+    if(str==cam) {
         return m_cameraNumber;
     }
 }

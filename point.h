@@ -41,17 +41,17 @@ class Point
 		* \brief Accessor to the first component
 		* \return x the first component of the point
 		*/
-		double x();
+		double x() const;
 		/*!
 		* \brief Accessor to the second component
 		* \return y the second component of the point
 		*/
-		double y();
+		double y() const;
 		/*!
 		* \brief Accessor to the third component
 		* \return z the third component of the point
 		*/
-		double z();
+		double z() const;
 		/*!
 		* \brief Allow the user to change the components of a point
 		*/

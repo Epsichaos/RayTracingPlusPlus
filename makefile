@@ -11,10 +11,10 @@ all: $(PRGM)
 	@rm -Rf *.o
 
 $(PRGM): $(OS)
-	clang++ $(FLAGS) $^ -o $@
+	g++ $(FLAGS) $^ -o $@
 
 %.o: %.cpp $(HS) makefile
-	clang++ $(FLAGS) -c $<
+	g++ $(FLAGS) -c $<
 
 run: $(PRGM)
 	./$(PRGM) $(OPTIONS)
