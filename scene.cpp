@@ -42,6 +42,7 @@ Scene::Scene(const string path) {
     // pour la camera
     int width, height;
     Vector vec_1;
+    string camera_state;
 
     // compteur pour parcourir les différents array
     int comp_sp = 0;
@@ -129,7 +130,7 @@ Scene::Scene(const string path) {
             }
             // si la ligne est de type camera
             if(line_img_str[0]=='c'&&line_img_str[1]=='a') {
-                sscanf(line_img_str, "ca (%lf %lf %lf) (%lf %lf %lf) %d %d %lf (%lf %lf %lf)", &cp1_1, &cp1_2, &cp1_3, &cp2_1, &cp2_2, &cp2_3, &width, &height, &nb_1, &color_R, &color_V, &color_B);
+                sscanf(line_img_str, "ca (%lf %lf %lf) (%lf %lf %lf) %d %d %lf (%lf %lf %lf) %s", &cp1_1, &cp1_2, &cp1_3, &cp2_1, &cp2_2, &cp2_3, &width, &height, &nb_1, &color_R, &color_V, &color_B, &camera_state);
                 ar_1.setPoint(cp1_1, cp1_2, cp1_3);
                 vec_1.setVector(cp2_1, cp2_2, cp2_3);
                 color_object.setColor(color_R, color_V, color_B);
@@ -139,6 +140,13 @@ Scene::Scene(const string path) {
                 ca.setAngle(nb_1);
                 ca.setColorObject(color_object);
                 ca.setTypeObject("camera");
+                if(camera_state=="true") {
+                    ca.setState("true");
+                    m_idActiveCamera == comp_ca;
+                }
+                else if(camera_state=="false") {
+                    ca.setState("false");
+                }
                 m_arrayOfCamera[comp_ca] = ca;
                 comp_ca++;
             }
@@ -166,7 +174,7 @@ int Scene::getNumberOfObjects() {
     return m_objectNumber;
 }
 
-int Scene::getActiveCamera() {
+Camera Scene::getActiveCamera() {
     return m_arrayOfCamera[m_idActiveCamera];
 }
 // rajouter les test sur les conditions : comparaison de string c++
@@ -174,17 +182,17 @@ int Scene::getNumberOfObjects(string str) {
     string cam = "camera";
     string lig = "light";
     string cub = "cube";
-    string sphere = "sphere";
-    if() {
+    string spr = "sphere";
+    if(str == spr) {
         return m_sphereNumber;
     }
-    if() {
+    if(str == cub) {
         return m_cubeNumber;
     }
-    if() {
+    if(str == lig) {
         return m_lightNumber;
     }
-    if() {
+    if(str == cam) {
         return m_cameraNumber;
     }
 }

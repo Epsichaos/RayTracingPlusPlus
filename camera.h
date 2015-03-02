@@ -4,6 +4,7 @@
 #include "vector.h"
 #include "object.h"
 #include "point.h"
+#include <string>
 
 /*!
 * \file camera.h
@@ -24,7 +25,7 @@ public:
 	* \param height an int which define the height of the camera
 	* \param angle a double which set the angle of the camera
 	*/
-	Camera(Point, Vector, int, int, double);
+	Camera(Point, Vector, int, int, double, std::string);
 	/*!
 	* \brief Allow the user to set or change the position of the camera
 	* \param pt a point which is the new position, the new center of the camera
@@ -46,6 +47,7 @@ public:
 	* \param angle a double which is the new angle
 	*/
 	void setAngle(double);
+	void setState(std::string);
 	void printCamera();
 	double getAngle();
 	Point getPosition();
@@ -71,6 +73,7 @@ protected:
 	* \brief *Angle* of the camera
 	*/
 	double m_angle;
+	int m_state;
 };
 
 #endif

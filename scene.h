@@ -29,7 +29,7 @@ public:
 		/*! \brief Accessor to the active camera
 	* \return A handler to the active Camera
 	*/
-	int getActiveCamera();
+	Camera getActiveCamera();
 	/*! \brief Accessor to one specific type of object
 	* \param str a string which contains the name of the class. **str** can be *light*, *camera*, *cube* or *sphere*
 	* \return The number of the objects of one specific class

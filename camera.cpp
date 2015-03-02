@@ -30,6 +30,15 @@ void Camera::setAngle(double angle) {
     m_angle = angle;
 }
 
+void Camera::setState(string str) {
+    if(str=="true") {
+        m_state = 1;
+    }
+    if(str=="false") {
+        m_state = 0;
+    }
+}
+
 void Camera::printCamera() {
     cout << "Camera de position";
     m_position.printPoint();
