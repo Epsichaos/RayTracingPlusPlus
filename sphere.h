@@ -3,6 +3,7 @@
 
 #include "object.h"
 #include "point.h"
+#include "vector.h"
 
 /*!
 * \file sphere.h
@@ -62,6 +63,7 @@ public:
 	*/
 	void setRadius(double);
 	void printSphere();
+	Vector computeNormale(Point);
 };
 
 #endif

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "sphere.h"
 #include "point.h"
-
+#include "fonctions.h"
 using namespace std;
 
 Sphere::Sphere() {
@@ -27,4 +27,10 @@ Point Sphere::getCenter() {
 void Sphere::printSphere() {
     cout << "La sphere a pour rayon " << m_radius << " et pour centre ";
     m_center.printPoint();
+}
+Vector Sphere::computeNormale(Point a)
+{
+    Vector b =(a-m_center);
+    b.normalize();
+return b;
 }

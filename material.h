@@ -28,13 +28,17 @@ class Material
      * \brief Color of the material
      */
  	Color m_color;
+ 	double m_diffuse_factor;
+ 	double m_ambient_factor;
 public:
     /*!
     * \fn setColorMat(Color c)
     * \brief Set c as the new color of the material
     * \param c the new color
     */
+    double getDiffuseFactor();
     void setColorMat(Color);
+    Color getColor();
  };
 
 #endif

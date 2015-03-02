@@ -31,19 +31,19 @@ public:
 	* \brief Accessor to the first component
 	* \return x the first component
 	*/
-	double x();
+	double x() const;
 	/*!
 	* \fn double y()
 	* \brief Accessor to the second component
 	* \return y the second component
 	*/
-	double y();
+	double y() const;
 	/*!
 	* \fn double z()
 	* \brief Accessor to the third component
 	* \return z the third component
 	*/
-	double z();
+	double z() const;
 	/*!
 	* \fn setVector(double x, double y, double z)
 	* \brief Change the components of one vector object
@@ -52,6 +52,7 @@ public:
 	* \param z the new third component
 	*/
 	void setVector(double, double, double);
+	void normalize();
 protected:
 	/*!
 	* \brief 1 component over 3 of the vector

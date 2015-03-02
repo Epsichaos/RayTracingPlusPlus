@@ -49,19 +49,19 @@
      * \brief Fonction to get the R-value of the color
      * \return The R-Value
      */
-     double getRed();
+     double getRed() const;
      /*!
      * \fn getGreen()
      * \brief Fonction to get the G-value of the color
      * \return The G-Value
      */
-     double getGreen();
+     double getGreen() const;
      /*!
      * \fn getBlue()
      * \brief Fonction to get the B-value of the color
      * \return The B-Value
      */
-     double getBlue();
+     double getBlue() const;
  };
 
  #endif

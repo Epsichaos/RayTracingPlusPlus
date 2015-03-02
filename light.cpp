@@ -16,3 +16,7 @@ void Light::printLight() {
     m_source.printPoint();
     cout << "et d'intensité " << m_intensity << endl;
 }
+Point Light::getSource()
+{
+	return m_source;
+}
