@@ -214,7 +214,6 @@ int Scene::getNumberOfObjects(string str){
     string cam = "camera";
     string lig = "light";
     string cub = "cube";
-<<<<<<< HEAD
     string spr = "sphere";
     if(str == spr) {
         return m_sphereNumber;
@@ -226,20 +225,6 @@ int Scene::getNumberOfObjects(string str){
         return m_lightNumber;
     }
     if(str == cam) {
-=======
-    string sphere = "sphere";
-    // UTILISER UN SWITCH ICI <--- plus pro
-    if(str==sphere) {
-        return m_sphereNumber;
-    }
-    if(str==cub) {
-        return m_cubeNumber;
-    }
-    if(str==lig) {
-        return m_lightNumber;
-    }
-    if(str==cam) {
->>>>>>> 4f8691c7345d58aa0faea2e792a9c6d8d421b795
         return m_cameraNumber;
     }
 }

@@ -25,11 +25,8 @@ public:
 	* \param height an int which define the height of the camera
 	* \param angle a double which set the angle of the camera
 	*/
-<<<<<<< HEAD
 	Camera(Point, Vector, int, int, double, std::string);
-=======
 	Camera(Point, Vector, int, int, double,Vector,Vector);
->>>>>>> 4f8691c7345d58aa0faea2e792a9c6d8d421b795
 	/*!
 	* \brief Allow the user to set or change the position of the camera
 	* \param pt a point which is the new position, the new center of the camera
@@ -80,12 +77,9 @@ protected:
 	* \brief *Angle* of the camera
 	*/
 	double m_angle;
-<<<<<<< HEAD
 	int m_state;
-=======
 	Vector m_orientationX;
 	Vector m_orientationY;
->>>>>>> 4f8691c7345d58aa0faea2e792a9c6d8d421b795
 };
 
 #endif
