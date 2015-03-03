@@ -29,12 +29,12 @@ void fill_tabX_tabY(Point **tabCenters,Point camerapos,Vector cameradir, Vector 
 {
 	int i,j;
 	double pixel_size = 2*DIST_FROM_CAMERA*tan(2*3.1415926535/360*VIEWING_ANGLE)/width;
-	Vector deltaX = pixel_size*orientationX, deltaY = pixel_size*orientationY;
+	Vector deltaX = pixel_size*orientationX, deltaY = -pixel_size*orientationY;
 	for(i=0;i<height;i++)
 	{
 		for(j=0;j<width;j++)
 			{
-				tabCenters[i][j] = camerapos+cameradir*DIST_FROM_CAMERA+(((double)height/2)*orientationY)*pixel_size-deltaY*i-width/2*pixel_size*orientationX+deltaX*j+0.5*pixel_size*orientationX+0.5*pixel_size*orientationY;// à vérifier !!
+				tabCenters[i][j] = camerapos+cameradir*DIST_FROM_CAMERA+(height/2*orientationY)*pixel_size+deltaY*i-width/2*pixel_size*orientationX+deltaX*j+0.5*pixel_size*orientationX+0.5*pixel_size*orientationY;// à vérifier !!
 			}
 	}
 }
@@ -225,10 +225,16 @@ Point computeIntersection(Ray rayon, Sphere sphere)
 {
 	if(sphere.Object::getType()=="sphere")
 	{
+		if(rayon.getDirection().y()<0.01 && rayon.getDirection().z()<0.01 && rayon.getDirection().y()>-0.01 && rayon.getDirection().z()>-0.01)
+		{
+		
+		}
 		double t1,t2,r, delta, t;
 		double a = (rayon.getDirection())*(rayon.getDirection());
-		double b = rayon.getDirection().x()*rayon.getStart().x()+rayon.getDirection().y()*rayon.getStart().y()+rayon.getDirection().z()*rayon.getStart().z();
-		double c = rayon.getStart().x()*rayon.getStart().x()+rayon.getStart().y()*rayon.getStart().y()+rayon.getStart().z()*rayon.getStart().z();
+		//double b = rayon.getDirection().x()*rayon.getStart().x()+rayon.getDirection().y()*rayon.getStart().y()+rayon.getDirection().z()*rayon.getStart().z();
+		double b = 2*rayon.getDirection().x()*(rayon.getStart().x()-sphere.getCenter().x())+2*rayon.getDirection().y()*(rayon.getStart().y()-sphere.getCenter().y())+2*rayon.getDirection().z()*(rayon.getStart().z()-sphere.getCenter().z());
+		//double c = rayon.getStart().x()*rayon.getStart().x()+rayon.getStart().y()*rayon.getStart().y()+rayon.getStart().z()*rayon.getStart().z();
+		double c = rayon.getStart().x()*rayon.getStart().x()+rayon.getStart().y()*rayon.getStart().y()+rayon.getStart().z()*rayon.getStart().z()+sphere.getCenter().x()*sphere.getCenter().x()+sphere.getCenter().y()*sphere.getCenter().y()+sphere.getCenter().z()*sphere.getCenter().z()-2*(sphere.getCenter().x()*rayon.getStart().x()+sphere.getCenter().y()*rayon.getStart().y()+sphere.getCenter().z()*rayon.getStart().z());
 		r = sphere.Sphere::getRadius();
 		c -= r*r;
 		delta = b*b-4*a*c;
@@ -250,7 +256,7 @@ Point computeIntersection(Ray rayon, Sphere sphere)
 			}
 
 		}
-		if(delta==0)
+		else if(delta==0)
 			t = -b/2/a;
 		else
 			t=MAX_DISTANCE;

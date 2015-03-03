@@ -132,13 +132,13 @@ Scene::Scene(const string path) {
             }
             // si la ligne est de type camera
             if(line_img_str[0]=='c'&&line_img_str[1]=='a') {
-                sscanf(line_img_str, "ca (%lf %lf %lf) (%lf %lf %lf) %d %d %lf (%lf %lf %lf) (%lf %lf %lf) %s", &cp1_1, &cp1_2, &cp1_3, &cp2_1, &cp2_2, &cp2_3, &width, &height, &nb_1, &cp3_1, &cp3_2, &cp3_3, &color_R, &color_V, &color_B, &camera_state2);
+                sscanf(line_img_str, "ca (%lf %lf %lf) (%lf %lf %lf) %d %d %lf (%lf %lf %lf) (%lf %lf %lf) (%lf %lf %lf) %s", &cp1_1, &cp1_2, &cp1_3, &cp2_1, &cp2_2, &cp2_3, &width, &height, &nb_1, &cp3_1, &cp3_2, &cp3_3, &cp4_1, &cp4_2, &cp4_3, &color_R, &color_V, &color_B, &camera_state2);
                 camera_state=camera_state2;
                 printf("\n%s\n",camera_state.c_str());
                 ar_1.setPoint(cp1_1, cp1_2, cp1_3);
                 vec_1.setVector(cp2_1, cp2_2, cp2_3);
                 ory.setVector(cp3_1,cp3_2,cp3_3);
-                orx = ory.getOrthonormalDVector(vec_1);
+                orx.setVector(cp4_1,cp4_2,cp4_3);
                 color_object.setColor(color_R, color_V, color_B);
                 ca.setPosition(ar_1);
                 ca.setDirection(vec_1);

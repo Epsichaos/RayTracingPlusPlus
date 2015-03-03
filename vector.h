@@ -53,7 +53,7 @@ public:
 	*/
 	void setVector(double, double, double);
 	void normalize();
-	Vector getOrthonormalDVector(Vector);
+	//Vector getOrthonormalDVector(Vector);
 	double getNorm();
 protected:
 	/*!
