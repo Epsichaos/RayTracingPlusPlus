@@ -1,5 +1,5 @@
 PRGM = prog
-FLAGS = -g -Wall -O3 -std=c++11
+FLAGS = -g -Wall -O0 -std=c++11
 OPTIONS =
 ARCHV = $(PRGM)-$$(whoami)
 

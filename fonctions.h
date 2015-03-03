@@ -14,12 +14,13 @@
 #ifndef FONCTIONS_H
 #define FONCTIONS_H
 
-void render(Scene const& Mainscene, Color* image, int width, int height);
+void render(Scene & Mainscene, Color* image, int width, int height);
 Color lancer_rayon(Ray rayon, Scene scene, int current_depth);
 Point computeIntersection(Ray, Sphere);
 int findClosest(Ray r, Point*, int);
 void fill_tabX_tabY(Point **tabCenters,Point camerapos,Vector cameradir, Vector orientationX,Vector orientationY, int width, int height);
 double computeShadow(Point, Sphere*,int , Light);
+void tabToBMP(Color *image, int w, int h, std::string path);
 Vector operator+(Vector const& a, Vector const& b);
 Color operator+(Color const& a, Color const& b);
 Point operator+(Point const& a, Vector const& b);

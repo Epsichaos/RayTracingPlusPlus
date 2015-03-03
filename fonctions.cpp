@@ -4,6 +4,7 @@
 void render(Scene & Mainscene, Color* image, int width, int height)
 {
 	int i,j;
+	Vector buffer;
 	Point **tabCenters = new Point*[height];	 // Ces tableaux 2D doivent contenir la position du centre des cases
 	for (i = 0; i < height; ++i)
 		tabCenters[i] = new Point[width];
@@ -13,11 +14,13 @@ void render(Scene & Mainscene, Color* image, int width, int height)
 	Ray rayon_init;
 	for(i=0;i<height;i++)
 	{
-		for (j = 0; i < width; ++j)
+		for (j = 0; j < width; ++j)
 		{
 			rayon_init.setStart(Mainscene.getActiveCamera().getPosition());
-			rayon_init.setDirection(tabCenters[i][j]-Mainscene.getActiveCamera().getPosition()); // en X puis en Y
-			image[i*height+j]=lancer_rayon(rayon_init, Mainscene,0);
+			buffer = tabCenters[i][j]-Mainscene.getActiveCamera().getPosition();
+			buffer.normalize();
+			rayon_init.setDirection(buffer); // en X puis en Y
+			image[i*width+j]=lancer_rayon(rayon_init, Mainscene,0);
 		}
 	}
 
@@ -25,7 +28,7 @@ void render(Scene & Mainscene, Color* image, int width, int height)
 void fill_tabX_tabY(Point **tabCenters,Point camerapos,Vector cameradir, Vector orientationX,Vector orientationY, int width, int height)
 {
 	int i,j;
-	double pixel_size = 2*DIST_FROM_CAMERA*tan(2*3.1415926535/360*VIEWING_ANGLE);
+	double pixel_size = 2*DIST_FROM_CAMERA*tan(2*3.1415926535/360*VIEWING_ANGLE)/width;
 	Vector deltaX = pixel_size*orientationX, deltaY = pixel_size*orientationY;
 	for(i=0;i<height;i++)
 	{
@@ -88,60 +91,68 @@ Color lancer_rayon(Ray rayon, Scene scene, int current_depth)
 	*/
 
 }
-void tabToBMP(Color *image, int w, int h, std::string path)
+void tabToBMP(Color *image, int w, int h, std::string filename)
 {
-	int r,g,b,x,y,i;
 	FILE *f;
-	unsigned char *img = NULL;
-	int filesize = 54 + 3*w*h;  //w is your image width, h is image height, both int
-	if( img )
-		free( img );
-	img = (unsigned char *)malloc(3*w*h);
-	memset(img,0,sizeof(img));
-
-	for(int i=0; i<w; i++)
-	{
-		for(int j=0; j<h; j++)
-		{
-			x=i; y=(h-1)-j;
-			r = image[i*h+j].getRed()*255;
-			g = image[i*h+j].getGreen()*255;
-			b = image[i*h+j].getBlue()*255;
-			if (r > 255) r=255;
-			if (g > 255) g=255;
-			if (b > 255) b=255;
-			img[(x+y*w)*3+2] = (unsigned char)(r);
-			img[(x+y*w)*3+1] = (unsigned char)(g);
-			img[(x+y*w)*3+0] = (unsigned char)(b);
-		}
-	}
-
-	unsigned char bmpfileheader[14] = {'B','M', 0,0,0,0, 0,0, 0,0, 54,0,0,0};
-	unsigned char bmpinfoheader[40] = {40,0,0,0, 0,0,0,0, 0,0,0,0, 1,0, 24,0};
-	unsigned char bmppad[3] = {0,0,0};
-
-	bmpfileheader[ 2] = (unsigned char)(filesize    );
-	bmpfileheader[ 3] = (unsigned char)(filesize>> 8);
-	bmpfileheader[ 4] = (unsigned char)(filesize>>16);
-	bmpfileheader[ 5] = (unsigned char)(filesize>>24);
-
-	bmpinfoheader[ 4] = (unsigned char)(       w    );
-	bmpinfoheader[ 5] = (unsigned char)(       w>> 8);
-	bmpinfoheader[ 6] = (unsigned char)(       w>>16);
-	bmpinfoheader[ 7] = (unsigned char)(       w>>24);
-	bmpinfoheader[ 8] = (unsigned char)(       h    );
-	bmpinfoheader[ 9] = (unsigned char)(       h>> 8);
-	bmpinfoheader[10] = (unsigned char)(       h>>16);
-	bmpinfoheader[11] = (unsigned char)(       h>>24);
-
-	f = fopen(path.c_str(),"wb");
+	int dpi = 50;
+	int k=w*h;
+	int s=4*k;
+	int filesize = 54 + s;
+	
+	double factor=39.375;
+	int m=static_cast<int>(factor);
+	
+	int ppm=dpi*m;
+	
+	unsigned char bmpfileheader[14]={'B', 'M',0,0,0,0, 0,0,0,0, 54,0,0,0};
+	unsigned char bmpinfoheader[40]={40,0,0,0, 0,0,0,0, 0,0,0,0, 1,0,24,0};
+	
+	bmpfileheader[ 2]=(unsigned char)(filesize);
+	bmpfileheader[ 3]=(unsigned char)(filesize>>8);
+	bmpfileheader[ 4]=(unsigned char)(filesize>>16);
+	bmpfileheader[ 5]=(unsigned char)(filesize>>24);
+	
+	bmpinfoheader[4]=(unsigned char)(w);
+	bmpinfoheader[5]=(unsigned char)(w>>8);
+	bmpinfoheader[6]=(unsigned char)(w>>16);
+	bmpinfoheader[7]=(unsigned char)(w>>24);
+	
+	bmpinfoheader[8]=(unsigned char)(h);
+	bmpinfoheader[9]=(unsigned char)(h>>8);
+	bmpinfoheader[10]=(unsigned char)(h>>16);
+	bmpinfoheader[11]=(unsigned char)(h>>24);
+	
+	bmpinfoheader[21]=(unsigned char)(s);
+	bmpinfoheader[22]=(unsigned char)(s>>8);
+	bmpinfoheader[23]=(unsigned char)(s>>16);
+	bmpinfoheader[24]=(unsigned char)(s>>24);
+	
+	bmpinfoheader[25]=(unsigned char)(ppm);
+	bmpinfoheader[26]=(unsigned char)(ppm>>8);
+	bmpinfoheader[27]=(unsigned char)(ppm>>16);
+	bmpinfoheader[28]=(unsigned char)(ppm>>24);	
+	
+	bmpinfoheader[29]=(unsigned char)(ppm);
+	bmpinfoheader[30]=(unsigned char)(ppm>>8);
+	bmpinfoheader[31]=(unsigned char)(ppm>>16);
+	bmpinfoheader[32]=(unsigned char)(ppm>>24);	
+	
+	f=fopen(filename.c_str(),"wb");
+	
 	fwrite(bmpfileheader,1,14,f);
 	fwrite(bmpinfoheader,1,40,f);
-	for(i=0; i<h; i++)
-	{
-		fwrite(img+(w*(h-i-1)*3),3,w,f);
-		fwrite(bmppad,1,(4-(w*3)%4)%4,f);
+	
+	for(int i=0; i<k; i++){
+		
+		double red=(image[i].getRed())*255;
+		double green=(image[i].getGreen())*255;
+		double blue=(image[i].getBlue())*255;
+		
+		unsigned char color[3]={(int)floor(blue),(int)floor(green),(int)floor(red)};
+		
+		fwrite(color,1,3,f);
 	}
+	
 	fclose(f);
 }
 
@@ -215,9 +226,9 @@ Point computeIntersection(Ray rayon, Sphere sphere)
 	if(sphere.Object::getType()=="sphere")
 	{
 		double t1,t2,r, delta, t;
-		int a = rayon.getDirection()*rayon.getDirection();
-		int b = rayon.getDirection().x()*rayon.getStart().x()+rayon.getDirection().y()*rayon.getStart().y()+rayon.getDirection().z()*rayon.getStart().z();
-		int c = rayon.getStart().x()*rayon.getStart().x()+rayon.getStart().y()*rayon.getStart().y()+rayon.getStart().z()*rayon.getStart().z();
+		double a = (rayon.getDirection())*(rayon.getDirection());
+		double b = rayon.getDirection().x()*rayon.getStart().x()+rayon.getDirection().y()*rayon.getStart().y()+rayon.getDirection().z()*rayon.getStart().z();
+		double c = rayon.getStart().x()*rayon.getStart().x()+rayon.getStart().y()*rayon.getStart().y()+rayon.getStart().z()*rayon.getStart().z();
 		r = sphere.Sphere::getRadius();
 		c -= r*r;
 		delta = b*b-4*a*c;

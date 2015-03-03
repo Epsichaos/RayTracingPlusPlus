@@ -53,6 +53,8 @@ public:
 	*/
 	void setVector(double, double, double);
 	void normalize();
+	Vector getOrthonormalDVector(Vector);
+	double getNorm();
 protected:
 	/*!
 	* \brief 1 component over 3 of the vector

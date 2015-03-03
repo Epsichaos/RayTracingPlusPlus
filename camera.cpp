@@ -69,3 +69,11 @@ Vector Camera::getOrientationY()
 {
 	return m_orientationY;
 }
+void Camera::setOrientationX(Vector orientationX)
+{
+    m_orientationX = orientationX;
+}
+void Camera::setOrientationY(Vector orientationY)
+{
+    m_orientationY = orientationY;
+}

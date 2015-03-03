@@ -1,5 +1,6 @@
 #include "vector.h"
 #include "cmath"
+#include "fonctions.h"
 using namespace std;
 
 Vector::Vector() {
@@ -36,4 +37,21 @@ void Vector::normalize()
     m_x /=norm;
     m_y /=norm;
     m_z /=norm;
+}
+double Vector::getNorm()
+{
+    return  sqrt(m_x*m_x+m_y*m_y+m_z*m_z);
+}
+Vector Vector::getOrthonormalDVector(Vector input)
+{
+    Vector temp(m_x,m_y,m_z);
+    Vector output;
+    if(input*temp == input.getNorm()*temp.getNorm())
+        output.setVector(0,0,0);
+    else
+    {
+        output.setVector((m_z*input.y()-input.z()*m_y)/(m_y*input.x()-m_x*input.y()),-(m_z*input.x()-input.z()*m_x)/(m_y*input.x()-m_x*input.y()) ,1.0);
+        output.normalize();
+    }
+    return output;
 }

@@ -56,6 +56,8 @@ public:
 	Vector getDirection();
 	Vector getOrientationX();
 	Vector getOrientationY();
+	void setOrientationX(Vector);
+	void setOrientationY(Vector);
 protected:
 	/*!
 	* \brief *Point* which define the center of the camera
