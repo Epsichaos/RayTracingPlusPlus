@@ -29,6 +29,7 @@ public:
 	* \param intens the new intensity
 	*/
 	void setIntensity(double);
+	double getIntensity();
 	void printLight();
 	Point getSource();
 protected:

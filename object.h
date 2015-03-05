@@ -46,6 +46,7 @@ public:
 	*/
 	std::string getType();
 	double getDiffuseFactor();
+	void setDiffuseFactor(double df);
 protected:
 	//type_object m_type;
 	//enum m_type {Camera, Light, Cube, Sphere, Mesh};

@@ -109,6 +109,7 @@ Scene::Scene(const string path) {
                 color_object.setColor(color_R, color_V, color_B);
                 spr.setColorObject(color_object);
                 spr.setTypeObject("sphere");
+                spr.Object::setDiffuseFactor(0.7);
                 m_arrayOfSphere[comp_sp] = spr;
                 comp_sp++;
             }

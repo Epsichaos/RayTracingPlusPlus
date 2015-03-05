@@ -19,7 +19,7 @@ Color lancer_rayon(Ray rayon, Scene scene, int current_depth);
 Point computeIntersection(Ray, Sphere);
 int findClosest(Ray r, Point*, int);
 void fill_tabX_tabY(Point **tabCenters,Point camerapos,Vector cameradir, Vector orientationX,Vector orientationY, int width, int height);
-double computeShadow(Point, Sphere*,int , Light);
+double computeShadow(Point, Sphere*,int , Light,int);
 void tabToBMP(Color *image, int w, int h, std::string path);
 Vector operator+(Vector const& a, Vector const& b);
 Color operator+(Color const& a, Color const& b);

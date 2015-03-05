@@ -55,3 +55,7 @@ double Object::getDiffuseFactor()
 {
     return m_mat.getDiffuseFactor();
 }
+void Object::setDiffuseFactor(double df)
+{
+    m_mat.setDiffuseFactor(df);
+}

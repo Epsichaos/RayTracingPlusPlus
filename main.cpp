@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include "fonctions.h"
-#define WIDTH 400
-#define HEIGHT 400
+#define WIDTH 800
+#define HEIGHT 800
 using namespace std;
 
 int main()

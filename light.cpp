@@ -20,3 +20,7 @@ Point Light::getSource()
 {
 	return m_source;
 }
+double Light::getIntensity()
+{
+	return m_intensity;
+}

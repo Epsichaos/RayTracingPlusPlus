@@ -38,6 +38,7 @@ public:
     */
     double getDiffuseFactor();
     void setColorMat(Color);
+    void setDiffuseFactor(double);
     Color getColor();
  };
 

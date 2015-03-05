@@ -8,9 +8,9 @@ void render(Scene & Mainscene, Color* image, int width, int height)
 	Point **tabCenters = new Point*[height];	 // Ces tableaux 2D doivent contenir la position du centre des cases
 	for (i = 0; i < height; ++i)
 		tabCenters[i] = new Point[width];
+
 	Camera activeCamera = Mainscene.getActiveCamera();
 	fill_tabX_tabY(tabCenters,activeCamera.getPosition(),activeCamera.getDirection(),activeCamera.getOrientationX(),activeCamera.getOrientationY(),width,height);
-
 	Ray rayon_init;
 	for(i=0;i<height;i++)
 	{
@@ -28,14 +28,17 @@ void render(Scene & Mainscene, Color* image, int width, int height)
 void fill_tabX_tabY(Point **tabCenters,Point camerapos,Vector cameradir, Vector orientationX,Vector orientationY, int width, int height)
 {
 	int i,j;
-	double pixel_size = 2*DIST_FROM_CAMERA*tan(2*3.1415926535/360*VIEWING_ANGLE)/width;
-	Vector deltaX = pixel_size*orientationX, deltaY = -pixel_size*orientationY;
+	double real_width = tan(M_PI/2*VIEWING_ANGLEX/180);
+	double real_height = tan(M_PI/2*VIEWING_ANGLEY/180);
+	double focal_lenght = sqrt(real_width*real_width + real_height*real_height) / ( 2*tan( 45/2 ) );
 	for(i=0;i<height;i++)
 	{
 		for(j=0;j<width;j++)
 			{
-				tabCenters[i][j] = camerapos+cameradir*DIST_FROM_CAMERA+(height/2*orientationY)*pixel_size+deltaY*i-width/2*pixel_size*orientationX+deltaX*j+0.5*pixel_size*orientationX+0.5*pixel_size*orientationY;// à vérifier !!
-			}
+			double alpha = tan(M_PI/2*VIEWING_ANGLEX/180)*(j-width/2)/(width/2);
+			double beta = tan(M_PI/2*VIEWING_ANGLEY/180)*(height/2-i)/(height/2);
+				tabCenters[i][j] = camerapos+cameradir*1+orientationX*alpha+orientationY*beta;// à vérifier !!
+			};
 	}
 }
 
@@ -63,15 +66,20 @@ Color lancer_rayon(Ray rayon, Scene scene, int current_depth)
 	indice_closest = findClosest(rayon, intersections,number_of_spheres);
 	if(indice_closest==-1)
 		return color_black;
+	else
+		printf("");
 	pixel_color = spheres[indice_closest].getColor();
-	this_diffuse_color = pixel_color;
+	diffuse_color = pixel_color*0.05;
 	Vector normale = spheres[indice_closest].computeNormale(intersections[indice_closest]);
+	normale.normalize();
 	for(int j=0;j<number_of_lights;j++)
 	{
-		shadow_factor = computeShadow(intersections[indice_closest], spheres, number_of_spheres,lights[j]); // penser à mettre l'atténuation dedans
+		this_diffuse_color = pixel_color;
+		shadow_factor = computeShadow(intersections[indice_closest], spheres, number_of_spheres,lights[j],indice_closest); // penser à mettre l'atténuation dedans
 		Vector ray_to_light = lights[j].getSource()-intersections[indice_closest];
-		this_diffuse_color = this_diffuse_color*shadow_factor*(ray_to_light*normale)*(spheres[indice_closest].Object::getDiffuseFactor());
-		this_diffuse_color = this_diffuse_color*lights[j].getColor();
+		ray_to_light.normalize();
+		this_diffuse_color = this_diffuse_color*shadow_factor*((ray_to_light*normale)>0?(ray_to_light*normale):0)*(spheres[indice_closest].Object::getDiffuseFactor());
+		this_diffuse_color = this_diffuse_color*lights[j].getColor()*lights[j].getColor()*lights[j].getIntensity();
 		diffuse_color= diffuse_color + this_diffuse_color;
 	}
 	return diffuse_color;
@@ -94,7 +102,7 @@ Color lancer_rayon(Ray rayon, Scene scene, int current_depth)
 void tabToBMP(Color *image, int w, int h, std::string filename)
 {
 	FILE *f;
-	int dpi = 50;
+	int dpi = 500;
 	int k=w*h;
 	int s=4*k;
 	int filesize = 54 + s;
@@ -201,17 +209,17 @@ double operator*(Vector const& a, Vector const& b)
 
 Color operator*(Color const& a, Color const& b)
 {
-	Color c(a.getGreen()*b.getGreen(),a.getRed()*b.getRed(),a.getBlue()*b.getBlue());
+	Color c(a.getRed()*b.getRed(),a.getGreen()*b.getGreen(),a.getBlue()*b.getBlue());
 	return c;
 }
 Color operator*(double const& a, Color const& b)
 {
-	Color c(a*b.getGreen(),a*b.getRed(),a*b.getBlue());
+	Color c(a*b.getRed(),a*b.getGreen(),a*b.getBlue());
 	return c;
 }
 Color operator*(Color const& a, double const& b)
 {
-	Color c(a.getGreen()*b,a.getRed()*b,a.getBlue()*b);
+	Color c(a.getRed()*b,a.getGreen()*b,a.getBlue()*b);
 	return c;
 }
 
@@ -232,9 +240,11 @@ Point computeIntersection(Ray rayon, Sphere sphere)
 		double t1,t2,r, delta, t;
 		double a = (rayon.getDirection())*(rayon.getDirection());
 		//double b = rayon.getDirection().x()*rayon.getStart().x()+rayon.getDirection().y()*rayon.getStart().y()+rayon.getDirection().z()*rayon.getStart().z();
+		//double b = 2*rayon.getDirection().x()*(rayon.getStart().x()-sphere.getCenter().x())+2*rayon.getDirection().y()*(rayon.getStart().y()-sphere.getCenter().y())+2*rayon.getDirection().z()*(rayon.getStart().z()-sphere.getCenter().z());
 		double b = 2*rayon.getDirection().x()*(rayon.getStart().x()-sphere.getCenter().x())+2*rayon.getDirection().y()*(rayon.getStart().y()-sphere.getCenter().y())+2*rayon.getDirection().z()*(rayon.getStart().z()-sphere.getCenter().z());
 		//double c = rayon.getStart().x()*rayon.getStart().x()+rayon.getStart().y()*rayon.getStart().y()+rayon.getStart().z()*rayon.getStart().z();
-		double c = rayon.getStart().x()*rayon.getStart().x()+rayon.getStart().y()*rayon.getStart().y()+rayon.getStart().z()*rayon.getStart().z()+sphere.getCenter().x()*sphere.getCenter().x()+sphere.getCenter().y()*sphere.getCenter().y()+sphere.getCenter().z()*sphere.getCenter().z()-2*(sphere.getCenter().x()*rayon.getStart().x()+sphere.getCenter().y()*rayon.getStart().y()+sphere.getCenter().z()*rayon.getStart().z());
+		//double c = rayon.getStart().x()*rayon.getStart().x()+rayon.getStart().y()*rayon.getStart().y()+rayon.getStart().z()*rayon.getStart().z()+sphere.getCenter().x()*sphere.getCenter().x()+sphere.getCenter().y()*sphere.getCenter().y()+sphere.getCenter().z()*sphere.getCenter().z()-2*(sphere.getCenter().x()*rayon.getStart().x()+sphere.getCenter().y()*rayon.getStart().y()+sphere.getCenter().z()*rayon.getStart().z());
+		double c =(rayon.getStart().x()-sphere.getCenter().x())*(rayon.getStart().x()-sphere.getCenter().x())+(rayon.getStart().y()-sphere.getCenter().y())*(rayon.getStart().y()-sphere.getCenter().y())+(rayon.getStart().z()-sphere.getCenter().z())*(rayon.getStart().z()-sphere.getCenter().z());
 		r = sphere.Sphere::getRadius();
 		c -= r*r;
 		delta = b*b-4*a*c;
@@ -246,7 +256,7 @@ Point computeIntersection(Ray rayon, Sphere sphere)
 			{
 				t=t1;
 			}
-			else if(t1<0&& t2>0)
+			else if(t1<0 && t2>0)
 			{
 				t=t2;
 			}
@@ -265,14 +275,18 @@ Point computeIntersection(Ray rayon, Sphere sphere)
 
 	}
 }
-double computeShadow(Point p, Sphere *s,int number_of_spheres, Light l)
+double computeShadow(Point p, Sphere *s,int number_of_spheres, Light l,int id)
 {
 	int i;
 	Point* intersections = new Point[number_of_spheres];
 	Ray rayon(p, l.getSource()-p);
+	Point useless(MAX_DISTANCE,0,0);
 	for (i = 0; i <  number_of_spheres; ++i)
 	{
-		intersections[i]=computeIntersection(rayon ,s[i]);
+		if(i != id)
+			intersections[i]=computeIntersection(rayon ,s[i]);
+		else
+			intersections[i]=useless;
 	}
 	if(findClosest(rayon, intersections, number_of_spheres)>-1)
 		return 0.0;
