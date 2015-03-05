@@ -53,6 +53,7 @@ protected:
 	* \brief Number of all the objects
 	*/
 	int m_objectNumber;
+	
 	Mesh m_mesh;
 	/*!
 	* \brief Number of all the sphere objects

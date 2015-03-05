@@ -3,6 +3,7 @@
 
 #include "point.h"
 #include "material.h"
+#include "vector.h"
 
 /*!
 * \file face.h

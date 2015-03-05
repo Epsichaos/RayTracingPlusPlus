@@ -2,6 +2,7 @@
 #include "sphere.h"
 #include "point.h"
 #include "fonctions.h"
+#include "operators.h"
 using namespace std;
 
 Sphere::Sphere() {
