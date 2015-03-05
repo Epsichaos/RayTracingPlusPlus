@@ -5,6 +5,10 @@
 #include "camera.h"
 #include "cube.h"
 #include "sphere.h"
+#include "mesh.h"
+#include "face.h"
+
+
 
 /*!
 * \file scene.h
@@ -21,7 +25,7 @@ public:
 	/*! \brief Constructor of the Scene class.
 	* \param *path* of the input file
 	*/
-	Scene(const std::string path);
+	Scene(const std::string,int);
 	/*! \brief Accessor to the objects
 	* \return The number of all the objects
 	*/
@@ -49,6 +53,7 @@ protected:
 	* \brief Number of all the objects
 	*/
 	int m_objectNumber;
+	Mesh m_mesh;
 	/*!
 	* \brief Number of all the sphere objects
 	*/

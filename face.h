@@ -1,6 +1,9 @@
 #ifndef FACE_H
 #define FACE_H
 
+#include "point.h"
+#include "material.h"
+
 /*!
 * \file face.h
 * \brief File which contains the class Face and all the variables and functions associated
@@ -12,23 +15,33 @@
 */
 class Face
 {
+public:
+	Face();
+	Face(Point, Point, Point);
+	Face(Point, Point, Point, Material);
+	void setFace(Point, Point, Point);
+	Point p1();
+	Point p2();
+	Point p3();
+	Vector v1();
+	Vector v2();
 protected:
 	/*!
 	* \brief First point of the face
 	*/
-	point m_p1;
+	Point m_p1;
 	/*!
 	* \brief Second point of the face
 	*/
-	point m_p2;
+	Point m_p2;
 	/*!
 	* \brief Last point of the face
 	*/
-	point m_p3;
+	Point m_p3;
 	/*!
 	* \brief Material of the face
 	*/
-	material m_m1;
+	Material m_m1;
 };
 
 #endif

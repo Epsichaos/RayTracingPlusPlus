@@ -1,5 +1,5 @@
 PRGM = prog
-FLAGS = -g -Wall -O0 -std=c++11
+FLAGS = -g -Wall -O0
 OPTIONS =
 ARCHV = $(PRGM)-$$(whoami)
 
@@ -9,7 +9,6 @@ OS = $(CS:.cpp=.o)
 
 all: $(PRGM)
 	@rm -Rf *.o
-
 $(PRGM): $(OS)
 	g++ $(FLAGS) $^ -o $@
 

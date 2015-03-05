@@ -11,6 +11,8 @@
 #include "cube.h"
 #include "light.h"
 #include "sphere.h"
+#include "mesh.h"
+#include "face.h"
 #ifndef FONCTIONS_H
 #define FONCTIONS_H
 
