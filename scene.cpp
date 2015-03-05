@@ -12,6 +12,7 @@
 #include "scene.h"
 #include "light.h"
 #include "camera.h"
+#include "mesh.h"
 
 using namespace std;
 
