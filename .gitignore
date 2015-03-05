@@ -2,3 +2,5 @@ Makefile
 latex/
 html/
 Makefile
+*.o
+output/*
