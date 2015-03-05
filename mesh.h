@@ -3,6 +3,7 @@
 
 #include "face.h"
 #include "vector.h"
+#include "object.h"
 /*!
 * \file mesh.h
 * \brief File which contains the class Mesh and all the variables and functions associated

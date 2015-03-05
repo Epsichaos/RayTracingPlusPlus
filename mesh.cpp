@@ -8,7 +8,7 @@ void Mesh::setNumberofFace(unsigned int nf)
 {
 	m_number_of_faces = nf;
 }
-unsigned int Mesh::getNumberOfFace()
+Point Mesh::getNumberOfFace()
 {
 	Point n(0,0,0);
 	return n;
