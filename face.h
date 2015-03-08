@@ -26,6 +26,9 @@ public:
 	Point p3();
 	Vector v1();
 	Vector v2();
+	Color getColor();
+	void setColor(Color);
+	double getDiffuseFactor();
 protected:
 	/*!
 	* \brief First point of the face

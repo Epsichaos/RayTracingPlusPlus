@@ -17,13 +17,17 @@ class Mesh : public Object
 {
 public:
 	Mesh();
+	~Mesh();
 	void setNumberofFace(unsigned int);
-	Point getNumberOfFace();
+	unsigned int getNumberOfFace();
 	void defineFaces(Face*, unsigned int);
-	Face* getFaceArray();
+	void defineNormales(Vector*, unsigned int);
+	void getFaceArray(Face*);
+	void getNormalesArray(Vector*);
 protected:
 	unsigned int m_number_of_faces;
 	Face *m_faces;
+	Vector *m_normales;
 };
 
 #endif

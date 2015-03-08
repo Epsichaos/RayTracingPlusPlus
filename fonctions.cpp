@@ -2,9 +2,12 @@
 #include "parameters.h"
 #include <stdio.h>
 #include "operators.h"
+#include <ctime>
 void render(Scene & Mainscene, Color* image, int width, int height)
 {
-	int i,j;
+	int i,j,temp;
+	clock_t temps_init;
+	double pourcentage, temps_restant;
 	Vector buffer;
 	Point **tabCenters = new Point*[height];	 // Ces tableaux 2D doivent contenir la position du centre des cases
 	for (i = 0; i < height; ++i)
@@ -13,17 +16,64 @@ void render(Scene & Mainscene, Color* image, int width, int height)
 	Camera activeCamera = Mainscene.getActiveCamera();
 	fill_tabX_tabY(tabCenters,activeCamera.getPosition(),activeCamera.getDirection(),activeCamera.getOrientationX(),activeCamera.getOrientationY(),width,height);
 	Ray rayon_init;
+
+
+
+
+	int number_of_spheres = Mainscene.getNumberOfObjects("sphere");
+	int number_of_cameras = Mainscene.getNumberOfObjects("camera");
+	int number_of_lights = Mainscene.getNumberOfObjects("light");
+	unsigned int number_of_intersections_mesh = Mainscene.getNumberOfMeshFaces();
+	Sphere* spheres = new Sphere[number_of_spheres];
+	Light* lights = new Light[number_of_lights];
+	Camera* cameras = new Camera[number_of_cameras];
+	Face*  faces = new Face[number_of_intersections_mesh];
+	Vector*  normales = new Vector[number_of_intersections_mesh];
+
+
+	Mainscene.getFaces(faces);
+	Mainscene.getNormales(normales);
+	Mainscene.getSpheres(spheres);
+	Mainscene.getLights(lights);
+	Mainscene.getCameras(cameras);
+
+
+
 	for(i=0;i<height;i++)
 	{
+		temps_init = clock();
 		for (j = 0; j < width; ++j)
 		{
+
 			rayon_init.setStart(Mainscene.getActiveCamera().getPosition());
 			buffer = tabCenters[i][j]-Mainscene.getActiveCamera().getPosition();
 			buffer.normalize();
 			rayon_init.setDirection(buffer); // en X puis en Y
-			image[i*width+j]=lancer_rayon(rayon_init, Mainscene,0);
+			image[i*width+j]=lancer_rayon(rayon_init, Mainscene,0,faces,normales,spheres,lights,cameras, number_of_spheres, number_of_cameras, number_of_lights, number_of_intersections_mesh);
 		}
+			pourcentage = 100*((i+1)*width);
+			pourcentage/=height;
+			pourcentage/=width;
+			temps_restant = (100-pourcentage)*(double)(clock()-temps_init)/(pourcentage/(i+1))/CLOCKS_PER_SEC;
+			if(temps_restant/60<1)
+			{
+				printf("%f secondes restantes \n",temps_restant );
+
+			}
+			else
+			{
+				printf("%f minutes de calcul restantes \n",temps_restant/60 );
+			}
+			
 	}
+	delete[] spheres;
+	delete[] lights;
+	delete[] cameras;
+	delete[] faces;
+	delete[] normales;
+	for (i = 0; i < height; ++i)
+		delete[] tabCenters[i];
+	delete[] tabCenters;
 
 }
 void fill_tabX_tabY(Point **tabCenters,Point camerapos,Vector cameradir, Vector orientationX,Vector orientationY, int width, int height)
@@ -43,46 +93,66 @@ void fill_tabX_tabY(Point **tabCenters,Point camerapos,Vector cameradir, Vector 
 	}
 }
 
-Color lancer_rayon(Ray rayon, Scene scene, int current_depth)
+Color lancer_rayon(Ray rayon, Scene &scene, int current_depth,Face *faces,Vector *normales, Sphere *spheres, Light *lights,Camera *cameras,int number_of_spheres,int number_of_cameras,int number_of_lights,unsigned	int number_of_intersections_mesh)
 {
+	Point* intersections = new Point[number_of_spheres];
+	Point* intersections2 = new Point[number_of_intersections_mesh];
 	Color pixel_color;
+	bool mesh_closest=false;
 	int indice_closest;
+	int indice_closest2;
 	Color this_diffuse_color;
 	Color color_point, color_black(0,0,0),diffuse_color;
 	double shadow_factor;
-	int number_of_spheres = scene.getNumberOfObjects("sphere");
-	int number_of_cameras = scene.getNumberOfObjects("camera");
-	int number_of_lights = scene.getNumberOfObjects("light");
-	Sphere* spheres = new Sphere[number_of_spheres];
-	Light* lights = new Light[number_of_lights];
-	Camera* cameras = new Camera[number_of_cameras];
-	Point* intersections = new Point[number_of_spheres];
-	scene.getSpheres(spheres);
-	scene.getLights(lights);
-	scene.getCameras(cameras);
 	for(int i=0;i<number_of_spheres;i++)
 	{
 		intersections[i] = computeIntersection(rayon,spheres[i]);
+		
+	}
+	for(int i=0;i<number_of_intersections_mesh;i++)
+	{
+	intersections2[i] = computeIntersection(rayon,faces[i], normales[i]);
 	}
 	indice_closest = findClosest(rayon, intersections,number_of_spheres);
-	if(indice_closest==-1)
+	indice_closest2 = findClosest(rayon, intersections2,number_of_intersections_mesh);
+	if(indice_closest==-1 && indice_closest2==-1)
+	{
+		delete[] intersections;
+		delete[] intersections2;
 		return color_black;
+	}
+	else if(indice_closest != -1 && indice_closest2==-1)
+		pixel_color = spheres[indice_closest].getColor();
+	else if(indice_closest == -1 && indice_closest2!=-1)
+		{
+		mesh_closest=true;
+		pixel_color = faces[indice_closest2].getColor();
+	}
 	else
-		printf("");
-	pixel_color = spheres[indice_closest].getColor();
+		if((intersections[indice_closest]-rayon.getStart()).getNorm()<(intersections2[indice_closest2]-rayon.getStart()).getNorm())
+		{
+			pixel_color = spheres[indice_closest].getColor();
+		}
+		else
+		{
+			mesh_closest=true;
+			pixel_color = faces[indice_closest2].getColor();
+		}
 	diffuse_color = pixel_color*0.05;
-	Vector normale = spheres[indice_closest].computeNormale(intersections[indice_closest]);
+	Vector normale = (mesh_closest?normales[indice_closest2]:spheres[indice_closest].computeNormale(intersections[indice_closest]));
 	normale.normalize();
 	for(int j=0;j<number_of_lights;j++)
 	{
 		this_diffuse_color = pixel_color;
-		shadow_factor = computeShadow(intersections[indice_closest], spheres, number_of_spheres,lights[j],indice_closest); // penser à mettre l'atténuation dedans
-		Vector ray_to_light = lights[j].getSource()-intersections[indice_closest];
+		shadow_factor = (mesh_closest?computeShadow(intersections2[indice_closest2], faces,normales, number_of_intersections_mesh,lights[j],indice_closest2):computeShadow(intersections[indice_closest], spheres, number_of_spheres,lights[j],indice_closest)); // penser à mettre l'atténuation dedans
+		Vector ray_to_light = lights[j].getSource()-(mesh_closest?intersections2[indice_closest2]:intersections[indice_closest]);
 		ray_to_light.normalize();
-		this_diffuse_color = this_diffuse_color*shadow_factor*((ray_to_light*normale)>0?(ray_to_light*normale):0)*(spheres[indice_closest].Object::getDiffuseFactor());
+		this_diffuse_color = this_diffuse_color*shadow_factor*((ray_to_light*normale)>0?(ray_to_light*normale):0)*((mesh_closest?1.0:spheres[indice_closest].Object::getDiffuseFactor()));
 		this_diffuse_color = this_diffuse_color*lights[j].getColor()*lights[j].getColor()*lights[j].getIntensity();
 		diffuse_color= diffuse_color + this_diffuse_color;
 	}
+	delete[] intersections;
+	delete[] intersections2;
 	return diffuse_color;
 
 	/*
@@ -212,6 +282,67 @@ Point computeIntersection(Ray rayon, Sphere sphere)
 
 	}
 }
+Point computeIntersection(Ray rayon, Face face, Vector normale)
+{
+		Point useless;
+		useless = rayon.getStart()+rayon.getDirection()*MAX_DISTANCE;
+		double xa = face.p1().x();
+		double ya = face.p1().y();
+		double za = face.p1().z();
+		double a = normale.x();
+		double b = normale.y();
+		double c = normale.z();
+		double e = rayon.getDirection().x();
+		double f = rayon.getDirection().y();
+		double g = rayon.getDirection().z();
+		double xb = rayon.getStart().x();
+		double yb = rayon.getStart().y();
+		double zb = rayon.getStart().z();
+		double t = (a*(xa-xb)+b*(ya-yb)+c*(za-zb))/(a*e+b*f+c*g);
+		if(t<=0)
+		{
+			return useless;
+		}
+		double xm = xb+t*e;
+		double ym = yb+t*f;
+		double zm = zb+t*g;
+		Point intersect(xm,ym,zm);
+		Vector app(xm-xa,ym-ya,zm-za);
+		Vector v1 = face.p2()-face.p1();
+		Vector v2 = face.p3()-face.p1();
+		v1.normalize();
+		v2.normalize();
+		app.normalize();
+		double angle1 = acos(v2*v1);
+		double angle2 = acos(app*v1);
+		if(angle2>angle1)
+		{
+			return useless;
+		}
+		else
+		{
+		angle1 = acos(v2*v1);
+		angle2 = acos(app*v2);
+			if(angle2>angle1)
+				return useless;
+			else
+			{
+		Vector app(xm-face.p2().x(),ym-face.p2().y(),zm-face.p2().z());
+		v1 = face.p1()-face.p2();
+		v2 = face.p3()-face.p2();
+		v1.normalize();
+		v2.normalize();
+		app.normalize();
+		angle1 = acos(v2*v1);
+		angle2 = acos(app*v1);
+		if(angle2>angle1)
+			return useless;
+		else
+			return intersect;
+			}
+		}
+
+}
 double computeShadow(Point p, Sphere *s,int number_of_spheres, Light l,int id)
 {
 	int i;
@@ -226,9 +357,41 @@ double computeShadow(Point p, Sphere *s,int number_of_spheres, Light l,int id)
 			intersections[i]=useless;
 	}
 	if(findClosest(rayon, intersections, number_of_spheres)>-1)
+	{
+		delete[] intersections;
 		return 0.0;
+	}
 	else 
+	{
+		delete[] intersections;
 		return 1.0;
+	}
+}
+
+double computeShadow(Point p, Face *f,Vector *n, unsigned int number_of_faces, Light l,int id)
+{
+	int i;
+	Point* intersections = new Point[number_of_faces];
+	Ray rayon(p, l.getSource()-p);
+	Point useless(MAX_DISTANCE,0,0);
+	for (i = 0; i <  number_of_faces; ++i)
+	{
+		if(i != id)
+			intersections[i]=computeIntersection(rayon ,f[i],n[i]);
+		else
+			intersections[i]=useless;
+	}
+	if(findClosest(rayon, intersections, number_of_faces)>-1)
+	{
+		delete[] intersections;
+		return 0.0;
+	}
+	else 
+	{
+		delete[] intersections;
+		return 1.0;
+	}
+	
 }
 int findClosest(Ray r, Point *p, int number_of_points)
 {

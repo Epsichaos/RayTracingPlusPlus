@@ -1,5 +1,5 @@
 PRGM = prog
-FLAGS = -g -Wall -O0
+FLAGS = -g -Wall -O3
 OPTIONS =
 ARCHV = $(PRGM)-$$(whoami)
 

@@ -45,3 +45,14 @@ void Face::setFace(Point a, Point b, Point c)
 	m_p2 = b;
 	m_p3 = c;
 }
+Color Face::getColor(){
+	return m_m1.getColor();
+}
+double Face::getDiffuseFactor()
+{
+    return m_m1.getDiffuseFactor();
+}
+void Face::setColor(Color c)
+{
+	m_m1.setColorMat(c);
+}

@@ -17,11 +17,13 @@
 #define FONCTIONS_H
 
 void render(Scene & Mainscene, Color* image, int width, int height);
-Color lancer_rayon(Ray rayon, Scene scene, int current_depth);
+Color lancer_rayon(Ray rayon, Scene &scene, int current_depth,Face *faces,Vector *normales, Sphere *spheres, Light *lights,Camera *cameras,int number_of_spheres,int number_of_cameras,int number_of_lights,unsigned	int number_of_intersections_mesh);
 Point computeIntersection(Ray, Sphere);
+Point computeIntersection(Ray ,Face, Vector);
 int findClosest(Ray r, Point*, int);
 void fill_tabX_tabY(Point **tabCenters,Point camerapos,Vector cameradir, Vector orientationX,Vector orientationY, int width, int height);
 double computeShadow(Point, Sphere*,int , Light,int);
+double computeShadow(Point, Face*,Vector* ,unsigned int , Light,int);
 void tabToBMP(Color *image, int w, int h, std::string path);
 
 #endif

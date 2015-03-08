@@ -47,7 +47,10 @@ public:
 	void getLights(Light *tab);
 	void getCubes(Cube *tab);
 	void getSpheres(Sphere *tab);
-
+	unsigned int getNumberOfMeshFaces();
+	void getFaces(Face*);
+	void getNormales(Vector*);
+	~Scene();
 protected:
 	/*!
 	* \brief Number of all the objects
