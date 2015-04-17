@@ -39,7 +39,13 @@ public:
     double getDiffuseFactor();
     void setColorMat(Color);
     void setDiffuseFactor(double);
+    void setRefraction(double);
+    void setReflexion(double);
+    int hasRefraction();
+    int hasReflexion();
     Color getColor();
+    double getReflexion();
+    double getRefraction();
  };
 
 #endif

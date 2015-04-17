@@ -47,6 +47,10 @@ public:
 	std::string getType();
 	double getDiffuseFactor();
 	void setDiffuseFactor(double df);
+	double getRefraction();
+	double getReflexion();
+	bool hasRefraction();
+	bool hasReflexion();
 protected:
 	//type_object m_type;
 	//enum m_type {Camera, Light, Cube, Sphere, Mesh};

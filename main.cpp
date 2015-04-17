@@ -8,7 +8,7 @@ using namespace std;
 
 int main()
 {
-	Scene main_scene("input/Mark_42.obj",1);
+	Scene main_scene("input/input",0);
 	Color *image = new Color[HEIGHT*WIDTH];
     // La fonction loadScene a été supprimée, utiliser le constructeur
     // pour initialiser la scene

@@ -5,6 +5,7 @@
 #include <ctime>
 #include <pthread.h>
 #include <iostream>
+#include <cmath> //pour cos(), sin(), asin()
 struct thread_data{
 	Color *retour;
 	Ray rayon;
@@ -88,7 +89,7 @@ void render(Scene & Mainscene, Color* image, int width, int height)
 	}
 	for( i=0; i < height; i++ ){
 				pthread_join (threads[i], NULL);
-				
+
 	}
 		/*pourcentage = 100*((i+1)*width);
 		pourcentage/=height;
@@ -207,37 +208,35 @@ void render(Scene & Mainscene, Color* image, int width, int height)
 				diffuse_color = pixel_color*0.05;
 				Vector normale = (mesh_closest?normales[indice_closest2]:spheres[indice_closest].computeNormale(intersections[indice_closest]));
 				normale.normalize();
-				for(int j=0;j<number_of_lights;j++)
-				{
-					this_diffuse_color = pixel_color;
-		shadow_factor = (mesh_closest?computeShadow(intersections2[indice_closest2], faces,normales, number_of_intersections_mesh,lights[j],indice_closest2):computeShadow(intersections[indice_closest], spheres, number_of_spheres,lights[j],indice_closest)); // penser à mettre l'atténuation dedans
-		Vector ray_to_light = lights[j].getSource()-(mesh_closest?intersections2[indice_closest2]:intersections[indice_closest]);
-		ray_to_light.normalize();
-		this_diffuse_color = this_diffuse_color*shadow_factor*((ray_to_light*normale)>0?(ray_to_light*normale):0)*((mesh_closest?1.0:spheres[indice_closest].Object::getDiffuseFactor()));
-		this_diffuse_color = this_diffuse_color*lights[j].getColor()*lights[j].getColor()*lights[j].getIntensity();
-		diffuse_color= diffuse_color + this_diffuse_color;
+			for(int j=0;j<number_of_lights;j++) {
+				this_diffuse_color = pixel_color;
+				shadow_factor = (mesh_closest?computeShadow(intersections2[indice_closest2], faces,normales, number_of_intersections_mesh,lights[j],indice_closest2):computeShadow(intersections[indice_closest], spheres, number_of_spheres,lights[j],indice_closest)); // penser à mettre l'atténuation dedans
+				Vector ray_to_light = lights[j].getSource()-(mesh_closest?intersections2[indice_closest2]:intersections[indice_closest]);
+				ray_to_light.normalize();
+				this_diffuse_color = this_diffuse_color*shadow_factor*((ray_to_light*normale)>0?(ray_to_light*normale):0)*((mesh_closest?1.0:spheres[indice_closest].Object::getDiffuseFactor()));					this_diffuse_color = this_diffuse_color*lights[j].getColor()*lights[j].getColor()*lights[j].getIntensity();
+				diffuse_color= diffuse_color + this_diffuse_color;
+			}
+			if(sortie_deja_definie!=1)
+				*(retour+j) = diffuse_color;
+/*
+			if(spheres[indice_closest].hasReflexion()!=0) {
+				Ray* new_ray = new Ray(intersections[indice_closest], rayon.getDirection()+2*(normale*rayon.getDirection())*normale);
+				if(current_depth_reflexion<MAX_RECCURSIVE_DEPTH_REFLEXION)
+					color_point = lancer_rayon(new_ray, scene, current_depth_reflexion+1, current_depth_refraction); // A voir plus tard pour passage par reference
+			}
+			if(spheres[indice_closest].hasRefraction()) {
+				Ray* new_ray = new Ray(intersections[indice_closest],
+				rayon.getDirection()*(1/spheres[indice_closest].getRefraction())+
+				((1/spheres[indice_closest].getRefraction())*(normale*rayon.getDirection())+
+				cos(asin((1/spheres[indice_closest].getRefraction())*sin(normale*rayon.getDirection()))))*normale);
+				if(current_depth_refraction<MAX_RECCURSIVE_DEPTH_REFRACTION)
+					color_point = lancer_rayon(new_ray, scene, current_depth_reflexion, current_depth_refraction+1);
+			}
+*/
 	}
-	if(sortie_deja_definie!=1)
-		*(retour+j) = diffuse_color;
-
-	/*
-	if(spheres[indice_closest].hasReflexion())
-	{
-
-		ray* new_ray = new ray(intersections[indice_closest], rayon.direction()-2*(normale*rayon.direction())*normale);
-		if(current_depth<MAX_RECCURSIVE_DEPTH)
-			color_point = lancer_rayon(new_ray, scene, current_depth+1); // A voir plus tard pour passage par reference  /!\
-	}
-	if(spheres[indice_closest].hasRefraction())
-	{
-
-	}
-	*/
-
-}
-delete[] intersections;
-delete[] intersections2;
-return NULL;
+	delete[] intersections;
+	delete[] intersections2;
+	return NULL;
 }
 void tabToBMP(Color *image, int w, int h, std::string filename)
 {
@@ -246,61 +245,61 @@ void tabToBMP(Color *image, int w, int h, std::string filename)
 	int k=w*h;
 	int s=4*k;
 	int filesize = 54 + s;
-	
+
 	double factor=39.375;
 	int m=static_cast<int>(factor);
-	
+
 	int ppm=dpi*m;
-	
+
 	unsigned char bmpfileheader[14]={'B', 'M',0,0,0,0, 0,0,0,0, 54,0,0,0};
 	unsigned char bmpinfoheader[40]={40,0,0,0, 0,0,0,0, 0,0,0,0, 1,0,24,0};
-	
+
 	bmpfileheader[ 2]=(unsigned char)(filesize);
 	bmpfileheader[ 3]=(unsigned char)(filesize>>8);
 	bmpfileheader[ 4]=(unsigned char)(filesize>>16);
 	bmpfileheader[ 5]=(unsigned char)(filesize>>24);
-	
+
 	bmpinfoheader[4]=(unsigned char)(w);
 	bmpinfoheader[5]=(unsigned char)(w>>8);
 	bmpinfoheader[6]=(unsigned char)(w>>16);
 	bmpinfoheader[7]=(unsigned char)(w>>24);
-	
+
 	bmpinfoheader[8]=(unsigned char)(h);
 	bmpinfoheader[9]=(unsigned char)(h>>8);
 	bmpinfoheader[10]=(unsigned char)(h>>16);
 	bmpinfoheader[11]=(unsigned char)(h>>24);
-	
+
 	bmpinfoheader[21]=(unsigned char)(s);
 	bmpinfoheader[22]=(unsigned char)(s>>8);
 	bmpinfoheader[23]=(unsigned char)(s>>16);
 	bmpinfoheader[24]=(unsigned char)(s>>24);
-	
+
 	bmpinfoheader[25]=(unsigned char)(ppm);
 	bmpinfoheader[26]=(unsigned char)(ppm>>8);
 	bmpinfoheader[27]=(unsigned char)(ppm>>16);
-	bmpinfoheader[28]=(unsigned char)(ppm>>24);	
-	
+	bmpinfoheader[28]=(unsigned char)(ppm>>24);
+
 	bmpinfoheader[29]=(unsigned char)(ppm);
 	bmpinfoheader[30]=(unsigned char)(ppm>>8);
 	bmpinfoheader[31]=(unsigned char)(ppm>>16);
-	bmpinfoheader[32]=(unsigned char)(ppm>>24);	
-	
+	bmpinfoheader[32]=(unsigned char)(ppm>>24);
+
 	f=fopen(filename.c_str(),"wb");
-	
+
 	fwrite(bmpfileheader,1,14,f);
 	fwrite(bmpinfoheader,1,40,f);
-	
+
 	for(int i=0; i<k; i++){
-		
+
 		double red=(image[i].getRed())*255;
 		double green=(image[i].getGreen())*255;
 		double blue=(image[i].getBlue())*255;
-		
+
 		unsigned char color[3]={(int)floor(blue),(int)floor(green),(int)floor(red)};
-		
+
 		fwrite(color,1,3,f);
 	}
-	
+
 	fclose(f);
 }
 
@@ -430,7 +429,7 @@ double computeShadow(Point p, Sphere *s,int number_of_spheres, Light l,int id)
 		delete[] intersections;
 		return 0.0;
 	}
-	else 
+	else
 	{
 		delete[] intersections;
 		return 1.0;
@@ -455,12 +454,12 @@ double computeShadow(Point p, Face *f,Vector *n, unsigned int number_of_faces, L
 		delete[] intersections;
 		return 0.0;
 	}
-	else 
+	else
 	{
 		delete[] intersections;
 		return 1.0;
 	}
-	
+
 }
 int findClosest(Ray r, Point *p, int number_of_points)
 {

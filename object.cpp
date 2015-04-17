@@ -59,3 +59,26 @@ void Object::setDiffuseFactor(double df)
 {
     m_mat.setDiffuseFactor(df);
 }
+double Object::getRefraction(){
+    m_mat.getRefraction();
+}
+double Object::getReflexion(){
+    m_mat.getReflexion();
+}
+
+bool Object::hasReflexion(){
+    if(m_mat.hasReflexion()==0){
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+bool Object::hasRefraction(){
+    if(m_mat.hasRefraction()==0){
+        return false;
+    }
+    else {
+        return true;
+    }
+}
