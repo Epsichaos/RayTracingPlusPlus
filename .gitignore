@@ -1,6 +1,5 @@
 Makefile
-latex/
-html/
-Makefile
+documentation/latex/
+documentation/html/
 *.o
 output/*
