@@ -13,11 +13,12 @@
 #include "sphere.h"
 #include "mesh.h"
 #include "face.h"
+#include <pthread.h>
 #ifndef FONCTIONS_H
 #define FONCTIONS_H
 
 void render(Scene & Mainscene, Color* image, int width, int height);
-Color lancer_rayon(Ray rayon, Scene &scene, int current_depth,Face *faces,Vector *normales, Sphere *spheres, Light *lights,Camera *cameras,int number_of_spheres,int number_of_cameras,int number_of_lights,unsigned	int number_of_intersections_mesh);
+void* lancer_rayon(void* arg);
 Point computeIntersection(Ray, Sphere);
 Point computeIntersection(Ray ,Face, Vector);
 int findClosest(Ray r, Point*, int);

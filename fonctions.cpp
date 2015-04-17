@@ -3,8 +3,30 @@
 #include <stdio.h>
 #include "operators.h"
 #include <ctime>
+#include <pthread.h>
+#include <iostream>
+struct thread_data{
+	Color *retour;
+	Ray rayon;
+	Scene *scene;
+	int current_depth;
+	Face *faces;
+	Vector *normales;
+	Sphere *spheres;
+	Light *lights;
+	Camera *cameras;
+	int number_of_spheres;
+	int number_of_cameras;
+	int number_of_lights;
+	unsigned int number_of_intersections_mesh;
+	Point **tabCenters;
+	int i;
+	int width;
+};
 void render(Scene & Mainscene, Color* image, int width, int height)
 {
+	pthread_t *threads = new pthread_t[height];
+	struct thread_data *td= new thread_data[height];
 	int i,j,temp;
 	clock_t temps_init;
 	double pourcentage, temps_restant;
@@ -15,7 +37,6 @@ void render(Scene & Mainscene, Color* image, int width, int height)
 
 	Camera activeCamera = Mainscene.getActiveCamera();
 	fill_tabX_tabY(tabCenters,activeCamera.getPosition(),activeCamera.getDirection(),activeCamera.getOrientationX(),activeCamera.getOrientationY(),width,height);
-	Ray rayon_init;
 
 
 
@@ -27,8 +48,8 @@ void render(Scene & Mainscene, Color* image, int width, int height)
 	Sphere* spheres = new Sphere[number_of_spheres];
 	Light* lights = new Light[number_of_lights];
 	Camera* cameras = new Camera[number_of_cameras];
-	Face*  faces = new Face[number_of_intersections_mesh];
-	Vector*  normales = new Vector[number_of_intersections_mesh];
+	Face* faces = new Face[number_of_intersections_mesh];
+	Vector* normales = new Vector[number_of_intersections_mesh];
 
 
 	Mainscene.getFaces(faces);
@@ -42,108 +63,153 @@ void render(Scene & Mainscene, Color* image, int width, int height)
 	for(i=0;i<height;i++)
 	{
 		temps_init = clock();
-		for (j = 0; j < width; ++j)
-		{
 
-			rayon_init.setStart(Mainscene.getActiveCamera().getPosition());
-			buffer = tabCenters[i][j]-Mainscene.getActiveCamera().getPosition();
-			buffer.normalize();
-			rayon_init.setDirection(buffer); // en X puis en Y
-			image[i*width+j]=lancer_rayon(rayon_init, Mainscene,0,faces,normales,spheres,lights,cameras, number_of_spheres, number_of_cameras, number_of_lights, number_of_intersections_mesh);
+		td[i].retour = &(image[i*width]);
+		td[i].scene = &Mainscene;
+		td[i].current_depth =0;
+		td[i].faces = faces;
+		td[i].normales = normales;
+		td[i].spheres = spheres;
+		td[i].lights = lights;
+		td[i].cameras = cameras;
+		td[i].number_of_spheres = number_of_spheres;
+		td[i].number_of_cameras = number_of_cameras;
+		td[i].number_of_lights = number_of_lights;
+		td[i].number_of_intersections_mesh = number_of_intersections_mesh;
+		td[i].width = width;
+		td[i].tabCenters = tabCenters;
+		td[i].i = i;
+
+		int rc = pthread_create(&threads[i], NULL,lancer_rayon, (void *)&(td[i]));
+		if (rc){
+			std::cout << "Error:unable to create thread," << rc << std::endl;
 		}
-			pourcentage = 100*((i+1)*width);
-			pourcentage/=height;
-			pourcentage/=width;
-			temps_restant = (100-pourcentage)*(double)(clock()-temps_init)/(pourcentage/(i+1))/CLOCKS_PER_SEC;
-			if(temps_restant/60<1)
-			{
-				printf("%f secondes restantes \n",temps_restant );
 
-			}
-			else
-			{
-				printf("%f minutes de calcul restantes \n",temps_restant/60 );
-			}
-			
 	}
-	delete[] spheres;
-	delete[] lights;
-	delete[] cameras;
-	delete[] faces;
-	delete[] normales;
-	for (i = 0; i < height; ++i)
-		delete[] tabCenters[i];
-	delete[] tabCenters;
-
-}
-void fill_tabX_tabY(Point **tabCenters,Point camerapos,Vector cameradir, Vector orientationX,Vector orientationY, int width, int height)
-{
-	int i,j;
-	double real_width = tan(M_PI/2*VIEWING_ANGLEX/180);
-	double real_height = tan(M_PI/2*VIEWING_ANGLEY/180);
-	double focal_lenght = sqrt(real_width*real_width + real_height*real_height) / ( 2*tan( 45/2 ) );
-	for(i=0;i<height;i++)
-	{
-		for(j=0;j<width;j++)
-			{
-			double alpha = tan(M_PI/2*VIEWING_ANGLEX/180)*(j-width/2)/(width/2);
-			double beta = tan(M_PI/2*VIEWING_ANGLEY/180)*(height/2-i)/(height/2);
-				tabCenters[i][j] = camerapos+cameradir*1+orientationX*alpha+orientationY*beta;// à vérifier !!
-			};
+	for( i=0; i < height; i++ ){
+				pthread_join (threads[i], NULL);
+				
 	}
-}
-
-Color lancer_rayon(Ray rayon, Scene &scene, int current_depth,Face *faces,Vector *normales, Sphere *spheres, Light *lights,Camera *cameras,int number_of_spheres,int number_of_cameras,int number_of_lights,unsigned	int number_of_intersections_mesh)
-{
-	Point* intersections = new Point[number_of_spheres];
-	Point* intersections2 = new Point[number_of_intersections_mesh];
-	Color pixel_color;
-	bool mesh_closest=false;
-	int indice_closest;
-	int indice_closest2;
-	Color this_diffuse_color;
-	Color color_point, color_black(0,0,0),diffuse_color;
-	double shadow_factor;
-	for(int i=0;i<number_of_spheres;i++)
-	{
-		intersections[i] = computeIntersection(rayon,spheres[i]);
-		
-	}
-	for(int i=0;i<number_of_intersections_mesh;i++)
-	{
-	intersections2[i] = computeIntersection(rayon,faces[i], normales[i]);
-	}
-	indice_closest = findClosest(rayon, intersections,number_of_spheres);
-	indice_closest2 = findClosest(rayon, intersections2,number_of_intersections_mesh);
-	if(indice_closest==-1 && indice_closest2==-1)
-	{
-		delete[] intersections;
-		delete[] intersections2;
-		return color_black;
-	}
-	else if(indice_closest != -1 && indice_closest2==-1)
-		pixel_color = spheres[indice_closest].getColor();
-	else if(indice_closest == -1 && indice_closest2!=-1)
+		/*pourcentage = 100*((i+1)*width);
+		pourcentage/=height;
+		pourcentage/=width;
+		temps_restant = (100-pourcentage)*(double)(clock()-temps_init)/(pourcentage/(i+1))/CLOCKS_PER_SEC;
+		if(temps_restant/60<1)
 		{
-		mesh_closest=true;
-		pixel_color = faces[indice_closest2].getColor();
-	}
-	else
-		if((intersections[indice_closest]-rayon.getStart()).getNorm()<(intersections2[indice_closest2]-rayon.getStart()).getNorm())
-		{
-			pixel_color = spheres[indice_closest].getColor();
+			printf("%f secondes restantes \n",temps_restant );
+
 		}
 		else
 		{
-			mesh_closest=true;
-			pixel_color = faces[indice_closest2].getColor();
+			printf("%f minutes de calcul restantes \n",temps_restant/60 );
 		}
-	diffuse_color = pixel_color*0.05;
-	Vector normale = (mesh_closest?normales[indice_closest2]:spheres[indice_closest].computeNormale(intersections[indice_closest]));
-	normale.normalize();
-	for(int j=0;j<number_of_lights;j++)
+*/
+		delete[] spheres;
+		delete[] lights;
+		delete[] cameras;
+		delete[] faces;
+		delete[] normales;
+		for (i = 0; i < height; ++i)
+			delete[] tabCenters[i];
+		delete[] tabCenters;
+
+	}
+	void fill_tabX_tabY(Point **tabCenters,Point camerapos,Vector cameradir, Vector orientationX,Vector orientationY, int width, int height)
 	{
-		this_diffuse_color = pixel_color;
+		int i,j;
+		double real_width = tan(M_PI/2*VIEWING_ANGLEX/180);
+		double real_height = tan(M_PI/2*VIEWING_ANGLEY/180);
+		double focal_lenght = sqrt(real_width*real_width + real_height*real_height) / ( 2*tan( 45/2 ) );
+		for(i=0;i<height;i++)
+		{
+			for(j=0;j<width;j++)
+			{
+				double alpha = tan(M_PI/2*VIEWING_ANGLEX/180)*(j-width/2)/(width/2);
+				double beta = tan(M_PI/2*VIEWING_ANGLEY/180)*(height/2-i)/(height/2);
+				tabCenters[i][j] = camerapos+cameradir*1+orientationX*alpha+orientationY*beta;// à vérifier !!
+			};
+		}
+	}
+
+	void* lancer_rayon(void* arg)
+	{
+		struct thread_data *my_data;
+		my_data = (struct thread_data *) arg;
+		Color* retour = my_data->retour;
+		Scene *scene = my_data->scene;
+		int current_depth =my_data->current_depth;
+		Face *faces = my_data->faces;
+		Vector *normales = my_data->normales;
+		Sphere *spheres = my_data->spheres;
+		Light *lights = my_data->lights;
+		Camera *cameras = my_data->cameras;
+		Point **tabCenters = my_data->tabCenters;
+		int width = my_data->width;
+		int number_of_spheres = my_data->number_of_spheres;
+		int number_of_cameras = my_data->number_of_cameras;
+		int number_of_lights = my_data->number_of_lights;
+		int t = my_data->i;
+		Vector buffer;
+		unsigned int number_of_intersections_mesh = my_data->number_of_intersections_mesh;
+		Ray rayon;
+
+		Point* intersections = new Point[number_of_spheres];
+		Point* intersections2 = new Point[number_of_intersections_mesh];
+		int sortie_deja_definie;
+		for (int j = 0; j < width; ++j)
+		{
+			sortie_deja_definie =0;
+			rayon.setStart((*scene).getActiveCamera().getPosition());
+			buffer = tabCenters[t][j]-(*scene).getActiveCamera().getPosition();
+			buffer.normalize();
+			rayon.setDirection(buffer); // en X puis en Y
+			Color pixel_color;
+			bool mesh_closest=false;
+			int indice_closest;
+			int indice_closest2;
+			Color this_diffuse_color;
+			Color color_point, color_black(0,0,0),diffuse_color;
+			double shadow_factor;
+			for(int i=0;i<number_of_spheres;i++)
+			{
+				intersections[i] = computeIntersection(rayon,spheres[i]);
+			}
+			for(int i=0;i<number_of_intersections_mesh;i++)
+			{
+				intersections2[i] = computeIntersection(rayon,faces[i], normales[i]);
+			}
+			indice_closest = findClosest(rayon, intersections,number_of_spheres);
+			indice_closest2 = findClosest(rayon, intersections2,number_of_intersections_mesh);
+			if(indice_closest==-1 && indice_closest2==-1)
+			{
+				*(retour+j) = color_black;
+				sortie_deja_definie =1;
+			}
+			else if(indice_closest != -1 && indice_closest2==-1)
+				pixel_color = spheres[indice_closest].getColor();
+			else if(indice_closest == -1 && indice_closest2!=-1)
+			{
+				mesh_closest=true;
+				pixel_color = faces[indice_closest2].getColor();
+			}
+			else
+			{
+				if((intersections[indice_closest]-rayon.getStart()).getNorm()<(intersections2[indice_closest2]-rayon.getStart()).getNorm())
+				{
+					pixel_color = spheres[indice_closest].getColor();
+				}
+				else
+				{
+					mesh_closest=true;
+					pixel_color = faces[indice_closest2].getColor();
+				}
+			}
+				diffuse_color = pixel_color*0.05;
+				Vector normale = (mesh_closest?normales[indice_closest2]:spheres[indice_closest].computeNormale(intersections[indice_closest]));
+				normale.normalize();
+				for(int j=0;j<number_of_lights;j++)
+				{
+					this_diffuse_color = pixel_color;
 		shadow_factor = (mesh_closest?computeShadow(intersections2[indice_closest2], faces,normales, number_of_intersections_mesh,lights[j],indice_closest2):computeShadow(intersections[indice_closest], spheres, number_of_spheres,lights[j],indice_closest)); // penser à mettre l'atténuation dedans
 		Vector ray_to_light = lights[j].getSource()-(mesh_closest?intersections2[indice_closest2]:intersections[indice_closest]);
 		ray_to_light.normalize();
@@ -151,9 +217,8 @@ Color lancer_rayon(Ray rayon, Scene &scene, int current_depth,Face *faces,Vector
 		this_diffuse_color = this_diffuse_color*lights[j].getColor()*lights[j].getColor()*lights[j].getIntensity();
 		diffuse_color= diffuse_color + this_diffuse_color;
 	}
-	delete[] intersections;
-	delete[] intersections2;
-	return diffuse_color;
+	if(sortie_deja_definie!=1)
+		*(retour+j) = diffuse_color;
 
 	/*
 	if(spheres[indice_closest].hasReflexion())
@@ -169,6 +234,10 @@ Color lancer_rayon(Ray rayon, Scene &scene, int current_depth,Face *faces,Vector
 	}
 	*/
 
+}
+delete[] intersections;
+delete[] intersections2;
+return NULL;
 }
 void tabToBMP(Color *image, int w, int h, std::string filename)
 {
@@ -242,7 +311,7 @@ Point computeIntersection(Ray rayon, Sphere sphere)
 	{
 		if(rayon.getDirection().y()<0.01 && rayon.getDirection().z()<0.01 && rayon.getDirection().y()>-0.01 && rayon.getDirection().z()>-0.01)
 		{
-		
+
 		}
 		double t1,t2,r, delta, t;
 		double a = (rayon.getDirection())*(rayon.getDirection());
@@ -284,63 +353,63 @@ Point computeIntersection(Ray rayon, Sphere sphere)
 }
 Point computeIntersection(Ray rayon, Face face, Vector normale)
 {
-		Point useless;
-		useless = rayon.getStart()+rayon.getDirection()*MAX_DISTANCE;
-		double xa = face.p1().x();
-		double ya = face.p1().y();
-		double za = face.p1().z();
-		double a = normale.x();
-		double b = normale.y();
-		double c = normale.z();
-		double e = rayon.getDirection().x();
-		double f = rayon.getDirection().y();
-		double g = rayon.getDirection().z();
-		double xb = rayon.getStart().x();
-		double yb = rayon.getStart().y();
-		double zb = rayon.getStart().z();
-		double t = (a*(xa-xb)+b*(ya-yb)+c*(za-zb))/(a*e+b*f+c*g);
-		if(t<=0)
-		{
-			return useless;
-		}
-		double xm = xb+t*e;
-		double ym = yb+t*f;
-		double zm = zb+t*g;
-		Point intersect(xm,ym,zm);
-		Vector app(xm-xa,ym-ya,zm-za);
-		Vector v1 = face.p2()-face.p1();
-		Vector v2 = face.p3()-face.p1();
-		v1.normalize();
-		v2.normalize();
-		app.normalize();
-		double angle1 = acos(v2*v1);
-		double angle2 = acos(app*v1);
-		if(angle2>angle1)
-		{
-			return useless;
-		}
-		else
-		{
+	Point useless;
+	useless = rayon.getStart()+rayon.getDirection()*MAX_DISTANCE;
+	double xa = face.p1().x();
+	double ya = face.p1().y();
+	double za = face.p1().z();
+	double a = normale.x();
+	double b = normale.y();
+	double c = normale.z();
+	double e = rayon.getDirection().x();
+	double f = rayon.getDirection().y();
+	double g = rayon.getDirection().z();
+	double xb = rayon.getStart().x();
+	double yb = rayon.getStart().y();
+	double zb = rayon.getStart().z();
+	double t = (a*(xa-xb)+b*(ya-yb)+c*(za-zb))/(a*e+b*f+c*g);
+	if(t<=0)
+	{
+		return useless;
+	}
+	double xm = xb+t*e;
+	double ym = yb+t*f;
+	double zm = zb+t*g;
+	Point intersect(xm,ym,zm);
+	Vector app(xm-xa,ym-ya,zm-za);
+	Vector v1 = face.p2()-face.p1();
+	Vector v2 = face.p3()-face.p1();
+	v1.normalize();
+	v2.normalize();
+	app.normalize();
+	double angle1 = acos(v2*v1);
+	double angle2 = acos(app*v1);
+	if(angle2>angle1+0.00001)
+	{
+		return useless;
+	}
+	else
+	{
 		angle1 = acos(v2*v1);
 		angle2 = acos(app*v2);
-			if(angle2>angle1)
-				return useless;
-			else
-			{
-		Vector app(xm-face.p2().x(),ym-face.p2().y(),zm-face.p2().z());
-		v1 = face.p1()-face.p2();
-		v2 = face.p3()-face.p2();
-		v1.normalize();
-		v2.normalize();
-		app.normalize();
-		angle1 = acos(v2*v1);
-		angle2 = acos(app*v1);
-		if(angle2>angle1)
+		if(angle2>angle1+0.00001)
 			return useless;
 		else
-			return intersect;
-			}
+		{
+			Vector app(xm-face.p2().x(),ym-face.p2().y(),zm-face.p2().z());
+			v1 = face.p1()-face.p2();
+			v2 = face.p3()-face.p2();
+			v1.normalize();
+			v2.normalize();
+			app.normalize();
+			angle1 = acos(v2*v1);
+			angle2 = acos(app*v1);
+			if(angle2>angle1+0.00001)
+				return useless;
+			else
+				return intersect;
 		}
+	}
 
 }
 double computeShadow(Point p, Sphere *s,int number_of_spheres, Light l,int id)
@@ -395,15 +464,15 @@ double computeShadow(Point p, Face *f,Vector *n, unsigned int number_of_faces, L
 }
 int findClosest(Ray r, Point *p, int number_of_points)
 {
-int i,i_closest=-1;
-double min = MAX_DISTANCE;
-for (i = 0; i < number_of_points; ++i)
-{
-	if((p[i]-r.getStart())*(p[i]-r.getStart())<min)
+	int i,i_closest=-1;
+	double min = MAX_DISTANCE;
+	for (i = 0; i < number_of_points; ++i)
 	{
-		min = (p[i]-r.getStart())*(p[i]-r.getStart());
-		i_closest = i;
+		if((p[i]-r.getStart())*(p[i]-r.getStart())<min)
+		{
+			min = (p[i]-r.getStart())*(p[i]-r.getStart());
+			i_closest = i;
+		}
 	}
-}
-return i_closest;
+	return i_closest;
 }
