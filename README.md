@@ -21,7 +21,7 @@ Le but de ce projet était de réaliser un raytracer simple, permettant de rendr
 
 *Utiliser les fichiers d'input dans le répertoire input/. Diverses options s'offrent à vous*
 
-1. Utiliser un fichier .obj (rien à faire, mais étant donné la grande variété des formats obj, ne fonctionne qu'avec un format obj en particulier : celui où on écrit `numéro du point / numéro texture / numéro normale)
+1. Utiliser un fichier .obj (rien à faire, mais étant donné la grande variété des formats obj, ne fonctionne qu'avec un format obj en particulier : celui où on écrit `numéro du point / numéro texture / numéro normale)`
 
 2. Utiliser un fichier d'input selon notre syntaxe spécifique
 
