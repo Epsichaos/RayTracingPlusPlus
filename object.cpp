@@ -1,7 +1,5 @@
 #include "object.h"
 #include <string>
-#include "struct.h"
-
 using namespace std;
 
 void Object::setColorObject(Color color_obj) {
@@ -50,6 +48,9 @@ string Object::getType() {
     if(m_type==4) {
         return "mesh";
     }
+    else {
+        return "unknown";
+    }
 }
 double Object::getDiffuseFactor()
 {
@@ -60,25 +61,32 @@ void Object::setDiffuseFactor(double df)
     m_mat.setDiffuseFactor(df);
 }
 double Object::getRefraction(){
-    m_mat.getRefraction();
+    return m_mat.getRefraction();
 }
 double Object::getReflexion(){
-    m_mat.getReflexion();
+    return m_mat.getReflexion();
+}
+
+void Object::setReflexion(double reflexion) {
+    m_mat.setReflexion(reflexion);
+}
+void Object::setRefraction(double refraction) {
+    m_mat.setRefraction(refraction);
 }
 
 bool Object::hasReflexion(){
-    if(m_mat.hasReflexion()==0){
-        return false;
+    if(m_mat.hasReflexion()){
+        return true;
     }
     else {
-        return true;
+        return false;
     }
 }
 bool Object::hasRefraction(){
-    if(m_mat.hasRefraction()==0){
-        return false;
+    if(m_mat.hasRefraction()){
+        return true;
     }
     else {
-        return true;
+        return false;
     }
 }

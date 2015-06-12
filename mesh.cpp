@@ -2,6 +2,9 @@
 
 Mesh::Mesh()
 {
+m_number_of_faces=0;
+m_faces = NULL;
+m_normales = NULL;
 
 }
 unsigned int Mesh::getNumberOfFace()

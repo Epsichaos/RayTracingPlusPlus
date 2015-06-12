@@ -16,7 +16,9 @@ Vector operator-(Point const& a, Point const& b);
 double operator*(Vector const& a, Vector const& b);
 Vector operator*(Vector const& a, double const& b);
 Vector operator*(double const& b, Vector const& a);
+Vector operator-(Vector const& a, Vector const& b);
 Color operator*(Color const& a, Color const& b);
 Color operator*(Color const& a, double const& b);
 Color operator*(double const& a, Color const& b);
+Vector operator^(Vector const& a, Vector const& b);
 #endif

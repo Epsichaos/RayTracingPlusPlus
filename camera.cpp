@@ -44,11 +44,6 @@ void Camera::setState(string str) {
     }
 }
 
-void Camera::printCamera() {
-    cout << "Camera de position";
-    m_position.printPoint();
-    cout << " de taille " << m_width << "x" << m_height << endl;
-}
 double Camera::getAngle()
 {
 	return m_angle;

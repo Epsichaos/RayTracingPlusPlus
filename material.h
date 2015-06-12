@@ -41,8 +41,8 @@ public:
     void setDiffuseFactor(double);
     void setRefraction(double);
     void setReflexion(double);
-    int hasRefraction();
-    int hasReflexion();
+    bool hasRefraction();
+    bool hasReflexion();
     Color getColor();
     double getReflexion();
     double getRefraction();

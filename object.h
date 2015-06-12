@@ -4,7 +4,6 @@
 #include "material.h"
 #include "color.h"
 #include "point.h"
-#include "struct.h"
 #include <string>
 
 /*!
@@ -46,9 +45,13 @@ public:
 	*/
 	std::string getType();
 	double getDiffuseFactor();
-	void setDiffuseFactor(double df);
 	double getRefraction();
 	double getReflexion();
+
+	void setDiffuseFactor(double df);
+	void setReflexion(double);
+	void setRefraction(double);
+
 	bool hasRefraction();
 	bool hasReflexion();
 protected:

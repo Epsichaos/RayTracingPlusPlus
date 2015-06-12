@@ -3,7 +3,6 @@
 
 #include "light.h"
 #include "camera.h"
-#include "cube.h"
 #include "sphere.h"
 #include "mesh.h"
 #include "face.h"
@@ -25,7 +24,7 @@ public:
 	/*! \brief Constructor of the Scene class.
 	* \param *path* of the input file
 	*/
-	Scene(const std::string,int);
+	Scene(const std::string,double);
 	/*! \brief Accessor to the objects
 	* \return The number of all the objects
 	*/
@@ -35,21 +34,30 @@ public:
 	*/
 	Camera getActiveCamera();
 	/*! \brief Accessor to one specific type of object
-	* \param str a string which contains the name of the class. **str** can be *light*, *camera*, *cube* or *sphere*
+	* \param str a string which contains the name of the class. **str** can be *light*, *camera* or *sphere*
 	* \return The number of the objects of one specific class
 	*/
 	int getNumberOfObjects(std::string);
-	// fonction de test pour débugger
-	void debugTest();
-	//void getObjects(Object* input_array);
-	//void getObjects(Object* input_array, enum m_type type);
+	/*! \brief Accessor to the camera. Fill a tab with all the camera objects
+	*/
 	void getCameras(Camera *tab);
+	/*! \brief Accessor to the lights. Fill a tab with all the light objects
+	*/
 	void getLights(Light *tab);
-	void getCubes(Cube *tab);
+	/*! \brief Accessor to the spheres. Fill a tab with all the sphere objects
+	*/
 	void getSpheres(Sphere *tab);
+	/*! \brief Accessor to the number of mesh faces.
+	* \return the number of mesh faces
+	*/
 	unsigned int getNumberOfMeshFaces();
+	/*! \brief Accessor to the faces of a mesh.
+	*/
 	void getFaces(Face*);
+	/*! \brief Accessor to the normales to the faces of a mesh
+	*/
 	void getNormales(Vector*);
+	void getMesh(Mesh*);
 	~Scene();
 protected:
 	/*!
@@ -67,10 +75,6 @@ protected:
 	*/
 	int m_cameraNumber;
 	/*!
-	* \brief Number of all the cube objects
-	*/
-	int m_cubeNumber;
-	/*!
 	* \brief Number of all the ligth objects
 	*/
 	int m_lightNumber;
@@ -79,10 +83,6 @@ protected:
 	* \brief Array which contains all the sphere objects
 	*/
 	Sphere *m_arrayOfSphere;
-	/*!
-	* \brief Array which contains all the cube objects
-	*/
-	Cube *m_arrayOfCube;
 	/*!
 	* \brief Array which contains all the camera objects
 	*/

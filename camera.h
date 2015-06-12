@@ -49,14 +49,32 @@ public:
 	* \param angle a double which is the new angle
 	*/
 	void setAngle(double);
+	/*! \brief Allow the user to set or change the set of the camera
+	* \param String, which is true or false
+	*/
 	void setState(std::string);
-	void printCamera();
+	/*! \brief Accessor to the angle of the camera
+	*/
 	double getAngle();
+	/*! \brief Accessor to the position of the camera
+	*/
 	Point getPosition();
+	/*! \brief Accessor to the direction of the camera
+	*/
 	Vector getDirection();
+	/*! \brief Accessor to the X-orientation of the camera
+	*/
 	Vector getOrientationX();
+	/*! \brief Accessor to the Y-orientation of the camera
+	*/
 	Vector getOrientationY();
+	/*! \briel Set the X-orinetation of the camera
+	* \param Vector the X-orientation 
+	*/
 	void setOrientationX(Vector);
+	/*! \briel Set the X-orinetation of the camera
+	* \param Vector the Y-orientation 
+	*/
 	void setOrientationY(Vector);
 protected:
 	/*!
@@ -79,8 +97,19 @@ protected:
 	* \brief *Angle* of the camera
 	*/
 	double m_angle;
+	/*!
+	* \brief It's the state of the camera, which can be `true` or `false`. We wanted to let the possibility
+	*for the user to declare more than one camera per scene, but only one shuld be active at the same time. The 
+	*others must be disabled.
+	*/
 	int m_state;
+	/*!
+	* \brief X-Orientation of the camera (X-axis)
+	*/
 	Vector m_orientationX;
+	/*!
+	* \brief Y-Orientation of the camera (Y-axis)
+	*/
 	Vector m_orientationY;
 };
 

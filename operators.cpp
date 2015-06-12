@@ -63,3 +63,11 @@ Vector operator-(Point const& a, Point const& b)
 	Vector c(a.x()-b.x(),a.y()-b.y(),a.z()-b.z());
 	return c;
 }
+Vector operator-(Vector const& a, Vector const& b) {
+	Vector c(a.x()-b.x(),a.y()-b.y(),a.z()-b.z());
+	return c;
+}
+Vector operator^(Vector const& a, Vector const& b) {
+	Vector c(a.y()*b.z()-a.z()*b.y(),a.z()*b.x()-a.x()*b.z(),a.x()*b.y()-a.y()*b.x());
+	return c;
+}

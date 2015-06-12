@@ -1,5 +1,5 @@
-PRGM = prog
-FLAGS = -pthread -g -Wall -O0
+PRGM = raytracer
+FLAGS =-g -pthread -O3
 OPTIONS =
 ARCHV = $(PRGM)-$$(whoami)
 
@@ -8,12 +8,11 @@ CS = $(wildcard *.cpp)
 OS = $(CS:.cpp=.o)
 
 all: $(PRGM)
-	@rm -Rf *.o
 $(PRGM): $(OS)
-	g++ $(FLAGS) $^ -o $@
+	clang++ $(FLAGS) $^ -o $@
 
 %.o: %.cpp $(HS) makefile
-	g++ $(FLAGS) -c $<
+	clang++ $(FLAGS) -c $<
 
 run: $(PRGM)
 	./$(PRGM) $(OPTIONS)

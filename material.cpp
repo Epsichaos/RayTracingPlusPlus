@@ -7,20 +7,20 @@ void Material::setRefraction(double refraction) {
 void Material::setReflexion(double reflexion) {
     m_reflexion = reflexion;
 }
-int Material::hasRefraction() {
-    if(m_refraction!=0) {
-        return 0;
+bool Material::hasRefraction() {
+    if(m_refraction==0) {
+        return false;
     }
     else {
-        return 1;
+        return true;
     }
 }
-int Material::hasReflexion() {
-    if(m_reflexion!=0) {
-        return 0;
+bool Material::hasReflexion() {
+    if(m_reflexion==0) {
+        return false;
     }
     else {
-        return 1;
+        return true;
     }
 }
 double Material::getRefraction() {
